@@ -1,0 +1,465 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LambdaF</title>
+    <meta
+      name="description"
+      content="Lambdaf — building focused, high-quality software."
+    />
+    <meta name="theme-color" content="#0b0b0f" />
+
+    <!-- Tailwind CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+      :root {
+        color-scheme: dark;
+      }
+      ::selection {
+        background: rgba(99, 102, 241, 0.35);
+      }
+
+      /* --- Logo strike animation --- */
+     @keyframes hammerStrike {
+  0% {
+    opacity: 0;
+    transform: translate(22%, -22%) rotate(-60deg) scale(0.98);
+  }
+  20% {
+    opacity: 1;
+    transform: translate(16%, -16%) rotate(-45deg) scale(1);
+  }
+  45% {
+    transform: translate(6%, -6%) rotate(-18deg) scale(1);
+  }
+  60% {
+    transform: translate(0%, 0%) rotate(0deg) scale(1);
+  }
+  68% {
+    transform: translate(1.2%, 1.2%) rotate(2deg) scale(1);
+  }
+  76% {
+    transform: translate(-0.6%, -0.6%) rotate(-1deg) scale(1);
+  }
+  86% {
+    transform: translate(0.3%, 0.3%) rotate(0.5deg) scale(1);
+  }
+  100% {
+    transform: translate(0%, 0%) rotate(0deg) scale(1);
+  }
+}
+
+      @keyframes anvilShake {
+         0%, 50% { transform: translate(0,0); }
+  62% { transform: translate(-1.5px, 1.5px); }
+  70% { transform: translate(1px, -1px); }
+  78% { transform: translate(-0.6px, 0.6px); }
+  86% { transform: translate(0.4px, -0.4px); }
+  100% { transform: translate(0,0); }
+      }
+
+    @keyframes impactGlow {
+  0%, 48% { opacity: 0; transform: scale(0.9); }
+  60% { opacity: 0.9; transform: scale(1); }
+  75% { opacity: 0.2; transform: scale(1.12); }
+  100% { opacity: 0; transform: scale(1.2); }
+}
+
+
+      .logo-wrap {
+        position: relative;
+      }
+      .logo-anvil {
+        animation: anvilShake 1.05s cubic-bezier(0.22, 0.61, 0.36, 1)
+ both;
+      }
+      .logo-hammer {
+        animation: hammerStrike 1.05s cubic-bezier(0.22, 0.61, 0.36, 1)
+ both;
+        transform-origin: 62% 52%;
+      }
+      .logo-glow {
+        position: absolute;
+        inset: -18%;
+        border-radius: 9999px;
+        background: radial-gradient(
+          circle,
+          rgba(250, 204, 21, 0.22),
+          rgba(99, 102, 241, 0.12),
+          transparent 62%
+        );
+        filter: blur(10px);
+        animation: impactGlow 1.05s cubic-bezier(0.2, 0.9, 0.2, 1) both;
+        pointer-events: none;
+      }
+
+      @keyframes introFadeOut {
+        0%,
+        82% {
+          opacity: 1;
+        }
+        100% {
+          opacity: 0;
+          visibility: hidden;
+        }
+      }
+
+      .intro {
+        position: fixed;
+        inset: 0;
+        z-index: 50;
+        display: grid;
+        place-items: center;
+        background: #0a0a0f;
+        animation: introFadeOut 1.25s ease forwards;
+        pointer-events: none;
+      }
+
+      .intro .logo-wrap {
+        height: min(52vh, 520px);
+        width: min(52vh, 520px);
+      }
+
+      /* Respect reduced motion */
+      @media (prefers-reduced-motion: reduce) {
+        .logo-anvil,
+        .logo-hammer,
+        .logo-glow {
+          animation: none !important;
+        }
+      }
+    </style>
+  </head>
+
+  <body class="bg-neutral-950 text-neutral-100 antialiased"
+      style="background: radial-gradient(1200px 600px at 50% -10%, rgba(255,255,255,0.04), transparent 60%), #0a0a0f;">
+
+    <div class="intro">
+  <div class="logo-wrap">
+    <div class="logo-glow"></div>
+
+    <img
+      src="./lambdaf_anvil_circle.png"
+      alt="LambdaF"
+      class="absolute inset-0 h-full w-full object-contain"
+      draggable="false"
+    />
+
+    <img
+      src="./lambdaf_hammer.png"
+      alt=""
+      class="logo-hammer absolute inset-0 h-full w-full object-contain"
+      draggable="false"
+    />
+  </div>
+</div>
+
+    <main class="relative">
+      <!-- HERO -->
+      <section class="mx-auto max-w-6xl px-6 pb-10 pt-16">
+        <div class="flex flex-col items-center text-center">
+          <!-- Layered logo -->
+          <div class="logo-wrap mb-5 h-24 w-24 md:h-28 md:w-28">
+            <div class="logo-glow"></div>
+            <img
+              src="./lambdaf_anvil_circle.png"
+              alt="LambdaF"
+              class="logo-anvil absolute inset-0 h-full w-full object-contain"
+              draggable="false"
+            />
+            <img
+              src="./lambdaf_hammer.png"
+              alt=""
+              class="absolute inset-0 h-full w-full object-contain"
+              draggable="false"
+            />
+          </div>
+
+          <h1
+            class="text-3xl font-semibold tracking-tight text-white md:text-5xl"
+          >
+            LambdaF
+          </h1>
+
+          <p
+            class="mt-3 max-w-2xl text-base leading-relaxed text-neutral-300 md:text-lg"
+          >
+            Building focused, high-quality software — minimal, fast, and
+            actually usable.
+          </p>
+
+          <div class="mt-6 flex flex-wrap justify-center gap-3">
+            <a
+              href="#projects"
+              class="rounded-xl bg-indigo-500 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-indigo-400 active:scale-[0.99]"
+            >
+              Projects
+            </a>
+            <a
+              href="https://github.com/lambdaf-org"
+              target="_blank"
+              rel="noreferrer"
+              class="rounded-xl bg-white/5 px-5 py-2.5 text-sm font-semibold text-neutral-100 ring-1 ring-white/10 transition hover:bg-white/10 active:scale-[0.99]"
+            >
+              GitHub
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- PROJECTS -->
+      <section id="projects" class="mx-auto max-w-6xl px-6 pb-20 pt-4">
+        <div>
+          <h2
+            class="text-xl font-semibold tracking-tight text-white md:text-2xl"
+          >
+            Projects
+          </h2>
+          <p class="mt-1 text-sm text-neutral-300">
+            Hand-picked repos. Hardcoded. No API calls. No bloat.
+          </p>
+        </div>
+
+        <div class="mt-8 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          <!-- CARD -->
+          <article
+            class="rounded-2xl bg-white/[0.03] p-5 ring-1 ring-white/10 transition hover:-translate-y-1 hover:bg-white/[0.06]"
+          >
+            <h3 class="text-base font-semibold text-white">Repo Clock</h3>
+            <p class="mt-2 text-sm leading-relaxed text-neutral-300">
+              Small Discord bot that lets you clock in & clock out.
+            </p>
+            <div class="mt-4">
+              <a
+                href="https://github.com/lambdaf-org/clock"
+                target="_blank"
+                rel="noreferrer"
+                class="inline-flex items-center gap-2 rounded-xl bg-white/5 px-3 py-2 text-sm font-medium text-neutral-100 ring-1 ring-white/10 transition hover:bg-white/10"
+              >
+                <span>Open</span>
+                <svg
+                  viewBox="0 0 24 24"
+                  class="h-4 w-4"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path d="M7 17L17 7" />
+                  <path d="M9 7h8v8" />
+                </svg>
+              </a>
+            </div>
+          </article>
+
+            <article
+            class="rounded-2xl bg-white/[0.03] p-5 ring-1 ring-white/10 transition hover:-translate-y-1 hover:bg-white/[0.06]"
+          >
+            <h3 class="text-base font-semibold text-white">Repo Clock</h3>
+            <p class="mt-2 text-sm leading-relaxed text-neutral-300">
+              Small Discord bot that lets you clock in & clock out.
+            </p>
+            <div class="mt-4">
+              <a
+                href="https://github.com/lambdaf-org/clock"
+                target="_blank"
+                rel="noreferrer"
+                class="inline-flex items-center gap-2 rounded-xl bg-white/5 px-3 py-2 text-sm font-medium text-neutral-100 ring-1 ring-white/10 transition hover:bg-white/10"
+              >
+                <span>Open</span>
+                <svg
+                  viewBox="0 0 24 24"
+                  class="h-4 w-4"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path d="M7 17L17 7" />
+                  <path d="M9 7h8v8" />
+                </svg>
+              </a>
+            </div>
+          </article>
+
+
+            <article
+            class="rounded-2xl bg-white/[0.03] p-5 ring-1 ring-white/10 transition hover:-translate-y-1 hover:bg-white/[0.06]"
+          >
+            <h3 class="text-base font-semibold text-white">Repo Clock</h3>
+            <p class="mt-2 text-sm leading-relaxed text-neutral-300">
+              Small Discord bot that lets you clock in & clock out.
+            </p>
+            <div class="mt-4">
+              <a
+                href="https://github.com/lambdaf-org/clock"
+                target="_blank"
+                rel="noreferrer"
+                class="inline-flex items-center gap-2 rounded-xl bg-white/5 px-3 py-2 text-sm font-medium text-neutral-100 ring-1 ring-white/10 transition hover:bg-white/10"
+              >
+                <span>Open</span>
+                <svg
+                  viewBox="0 0 24 24"
+                  class="h-4 w-4"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path d="M7 17L17 7" />
+                  <path d="M9 7h8v8" />
+                </svg>
+              </a>
+            </div>
+          </article>
+
+
+            <article
+            class="rounded-2xl bg-white/[0.03] p-5 ring-1 ring-white/10 transition hover:-translate-y-1 hover:bg-white/[0.06]"
+          >
+            <h3 class="text-base font-semibold text-white">Repo Clock</h3>
+            <p class="mt-2 text-sm leading-relaxed text-neutral-300">
+              Small Discord bot that lets you clock in & clock out.
+            </p>
+            <div class="mt-4">
+              <a
+                href="https://github.com/lambdaf-org/clock"
+                target="_blank"
+                rel="noreferrer"
+                class="inline-flex items-center gap-2 rounded-xl bg-white/5 px-3 py-2 text-sm font-medium text-neutral-100 ring-1 ring-white/10 transition hover:bg-white/10"
+              >
+                <span>Open</span>
+                <svg
+                  viewBox="0 0 24 24"
+                  class="h-4 w-4"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path d="M7 17L17 7" />
+                  <path d="M9 7h8v8" />
+                </svg>
+              </a>
+            </div>
+          </article>
+
+
+            <article
+            class="rounded-2xl bg-white/[0.03] p-5 ring-1 ring-white/10 transition hover:-translate-y-1 hover:bg-white/[0.06]"
+          >
+            <h3 class="text-base font-semibold text-white">Repo Clock</h3>
+            <p class="mt-2 text-sm leading-relaxed text-neutral-300">
+              Small Discord bot that lets you clock in & clock out.
+            </p>
+            <div class="mt-4">
+              <a
+                href="https://github.com/lambdaf-org/clock"
+                target="_blank"
+                rel="noreferrer"
+                class="inline-flex items-center gap-2 rounded-xl bg-white/5 px-3 py-2 text-sm font-medium text-neutral-100 ring-1 ring-white/10 transition hover:bg-white/10"
+              >
+                <span>Open</span>
+                <svg
+                  viewBox="0 0 24 24"
+                  class="h-4 w-4"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path d="M7 17L17 7" />
+                  <path d="M9 7h8v8" />
+                </svg>
+              </a>
+            </div>
+          </article>
+
+
+            <article
+            class="rounded-2xl bg-white/[0.03] p-5 ring-1 ring-white/10 transition hover:-translate-y-1 hover:bg-white/[0.06]"
+          >
+            <h3 class="text-base font-semibold text-white">Repo Clock</h3>
+            <p class="mt-2 text-sm leading-relaxed text-neutral-300">
+              Small Discord bot that lets you clock in & clock out.
+            </p>
+            <div class="mt-4">
+              <a
+                href="https://github.com/lambdaf-org/clock"
+                target="_blank"
+                rel="noreferrer"
+                class="inline-flex items-center gap-2 rounded-xl bg-white/5 px-3 py-2 text-sm font-medium text-neutral-100 ring-1 ring-white/10 transition hover:bg-white/10"
+              >
+                <span>Open</span>
+                <svg
+                  viewBox="0 0 24 24"
+                  class="h-4 w-4"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path d="M7 17L17 7" />
+                  <path d="M9 7h8v8" />
+                </svg>
+              </a>
+            </div>
+          </article>
+
+            <article
+            class="rounded-2xl bg-white/[0.03] p-5 ring-1 ring-white/10 transition hover:-translate-y-1 hover:bg-white/[0.06]"
+          >
+            <h3 class="text-base font-semibold text-white">Repo Clock</h3>
+            <p class="mt-2 text-sm leading-relaxed text-neutral-300">
+              Small Discord bot that lets you clock in & clock out.
+            </p>
+            <div class="mt-4">
+              <a
+                href="https://github.com/lambdaf-org/clock"
+                target="_blank"
+                rel="noreferrer"
+                class="inline-flex items-center gap-2 rounded-xl bg-white/5 px-3 py-2 text-sm font-medium text-neutral-100 ring-1 ring-white/10 transition hover:bg-white/10"
+              >
+                <span>Open</span>
+                <svg
+                  viewBox="0 0 24 24"
+                  class="h-4 w-4"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path d="M7 17L17 7" />
+                  <path d="M9 7h8v8" />
+                </svg>
+              </a>
+            </div>
+          </article>
+          <!-- Duplicate cards as needed -->
+        </div>
+      </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="relative border-t border-white/10">
+      <div class="mx-auto max-w-6xl px-6 py-10 text-center">
+        <p class="text-sm font-semibold text-white">LambdaF</p>
+        <p class="mt-1 text-sm text-neutral-400">
+          Minimal landing page. Static by design.
+        </p>
+
+        <div class="mt-4 flex justify-center gap-3">
+          <a
+            class="rounded-xl bg-white/5 px-4 py-2 text-sm font-medium text-neutral-100 ring-1 ring-white/10 transition hover:bg-white/10"
+            href="https://github.com/lambdaf-org"
+            target="_blank"
+            rel="noreferrer"
+            >GitHub</a
+          >
+        </div>
+
+        <p class="mt-6 text-xs text-neutral-500">
+          © <span id="y">2026</span> Lambdaf-org
+        </p>
+      </div>
+      <script>
+        document.getElementById("y").textContent = new Date().getFullYear();
+      </script>
+    </footer>
+  </body>
+</html>
