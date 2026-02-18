@@ -22,62 +22,85 @@
       }
 
       /* --- Logo strike animation --- */
-     @keyframes hammerStrike {
-  0% {
-    opacity: 0;
-    transform: translate(22%, -22%) rotate(-60deg) scale(0.98);
-  }
-  20% {
-    opacity: 1;
-    transform: translate(16%, -16%) rotate(-45deg) scale(1);
-  }
-  45% {
-    transform: translate(6%, -6%) rotate(-18deg) scale(1);
-  }
-  60% {
-    transform: translate(0%, 0%) rotate(0deg) scale(1);
-  }
-  68% {
-    transform: translate(1.2%, 1.2%) rotate(2deg) scale(1);
-  }
-  76% {
-    transform: translate(-0.6%, -0.6%) rotate(-1deg) scale(1);
-  }
-  86% {
-    transform: translate(0.3%, 0.3%) rotate(0.5deg) scale(1);
-  }
-  100% {
-    transform: translate(0%, 0%) rotate(0deg) scale(1);
-  }
-}
-
-      @keyframes anvilShake {
-         0%, 50% { transform: translate(0,0); }
-  62% { transform: translate(-1.5px, 1.5px); }
-  70% { transform: translate(1px, -1px); }
-  78% { transform: translate(-0.6px, 0.6px); }
-  86% { transform: translate(0.4px, -0.4px); }
-  100% { transform: translate(0,0); }
+      @keyframes hammerStrike {
+        0% {
+          opacity: 0;
+          transform: translate(22%, -22%) rotate(-60deg) scale(0.98);
+        }
+        20% {
+          opacity: 1;
+          transform: translate(16%, -16%) rotate(-45deg) scale(1);
+        }
+        45% {
+          transform: translate(6%, -6%) rotate(-18deg) scale(1);
+        }
+        60% {
+          transform: translate(0%, 0%) rotate(0deg) scale(1);
+        }
+        68% {
+          transform: translate(1.2%, 1.2%) rotate(2deg) scale(1);
+        }
+        76% {
+          transform: translate(-0.6%, -0.6%) rotate(-1deg) scale(1);
+        }
+        86% {
+          transform: translate(0.3%, 0.3%) rotate(0.5deg) scale(1);
+        }
+        100% {
+          transform: translate(0%, 0%) rotate(0deg) scale(1);
+        }
       }
 
-    @keyframes impactGlow {
-  0%, 48% { opacity: 0; transform: scale(0.9); }
-  60% { opacity: 0.9; transform: scale(1); }
-  75% { opacity: 0.2; transform: scale(1.12); }
-  100% { opacity: 0; transform: scale(1.2); }
-}
+      @keyframes anvilShake {
+        0%,
+        50% {
+          transform: translate(0, 0);
+        }
+        62% {
+          transform: translate(-1.5px, 1.5px);
+        }
+        70% {
+          transform: translate(1px, -1px);
+        }
+        78% {
+          transform: translate(-0.6px, 0.6px);
+        }
+        86% {
+          transform: translate(0.4px, -0.4px);
+        }
+        100% {
+          transform: translate(0, 0);
+        }
+      }
 
+      @keyframes impactGlow {
+        0%,
+        48% {
+          opacity: 0;
+          transform: scale(0.9);
+        }
+        60% {
+          opacity: 0.9;
+          transform: scale(1);
+        }
+        75% {
+          opacity: 0.2;
+          transform: scale(1.12);
+        }
+        100% {
+          opacity: 0;
+          transform: scale(1.2);
+        }
+      }
 
       .logo-wrap {
         position: relative;
       }
       .logo-anvil {
-        animation: anvilShake 1.05s cubic-bezier(0.22, 0.61, 0.36, 1)
- both;
+        animation: anvilShake 1.05s cubic-bezier(0.22, 0.61, 0.36, 1) both;
       }
       .logo-hammer {
-        animation: hammerStrike 1.05s cubic-bezier(0.22, 0.61, 0.36, 1)
- both;
+        animation: hammerStrike 1.05s cubic-bezier(0.22, 0.61, 0.36, 1) both;
         transform-origin: 62% 52%;
       }
       .logo-glow {
@@ -133,28 +156,37 @@
     </style>
   </head>
 
-  <body class="bg-neutral-950 text-neutral-100 antialiased"
-      style="background: radial-gradient(1200px 600px at 50% -10%, rgba(255,255,255,0.04), transparent 60%), #0a0a0f;">
-
+  <body
+    class="bg-neutral-950 text-neutral-100 antialiased"
+    style="
+      background:
+        radial-gradient(
+          1200px 600px at 50% -10%,
+          rgba(255, 255, 255, 0.04),
+          transparent 60%
+        ),
+        #0a0a0f;
+    "
+  >
     <div class="intro">
-  <div class="logo-wrap">
-    <div class="logo-glow"></div>
+      <div class="logo-wrap">
+        <div class="logo-glow"></div>
 
-    <img
-      src="./lambdaf_anvil_circle.png"
-      alt="LambdaF"
-      class="absolute inset-0 h-full w-full object-contain"
-      draggable="false"
-    />
+        <img
+          src="./lambdaf_anvil_circle.png"
+          alt="LambdaF"
+          class="absolute inset-0 h-full w-full object-contain"
+          draggable="false"
+        />
 
-    <img
-      src="./lambdaf_hammer.png"
-      alt=""
-      class="logo-hammer absolute inset-0 h-full w-full object-contain"
-      draggable="false"
-    />
-  </div>
-</div>
+        <img
+          src="./lambdaf_hammer.png"
+          alt=""
+          class="logo-hammer absolute inset-0 h-full w-full object-contain"
+          draggable="false"
+        />
+      </div>
+    </div>
 
     <main class="relative">
       <!-- HERO -->
@@ -253,9 +285,14 @@
             </div>
           </article>
 
-            <article
+          <article
             class="rounded-2xl bg-white/[0.03] p-5 ring-1 ring-white/10 transition hover:-translate-y-1 hover:bg-white/[0.06]"
           >
+            <img
+              src="./images/arkhelix.png"
+              alt="ArkHelix preview"
+              class="mb-4 h-36 w-full rounded-xl object-cover ring-1 ring-white/10"
+            />
             <h3 class="text-base font-semibold text-white">ArkHelix</h3>
             <p class="mt-2 text-sm leading-relaxed text-neutral-300">
               A web-based breeding & mutation manager for ARK: Survival Ascended
@@ -263,155 +300,6 @@
             <div class="mt-4">
               <a
                 href="https://github.com/lambdaf-org/arkhelix"
-                target="_blank"
-                rel="noreferrer"
-                class="inline-flex items-center gap-2 rounded-xl bg-white/5 px-3 py-2 text-sm font-medium text-neutral-100 ring-1 ring-white/10 transition hover:bg-white/10"
-              >
-                <span>Open</span>
-                <svg
-                  viewBox="0 0 24 24"
-                  class="h-4 w-4"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                >
-                  <path d="M7 17L17 7" />
-                  <path d="M9 7h8v8" />
-                </svg>
-              </a>
-            </div>
-          </article>
-
-
-            <article
-            class="rounded-2xl bg-white/[0.03] p-5 ring-1 ring-white/10 transition hover:-translate-y-1 hover:bg-white/[0.06]"
-          >
-            <h3 class="text-base font-semibold text-white">Repo Clock</h3>
-            <p class="mt-2 text-sm leading-relaxed text-neutral-300">
-              Small Discord bot that lets you clock in & clock out.
-            </p>
-            <div class="mt-4">
-              <a
-                href="https://github.com/lambdaf-org/clock"
-                target="_blank"
-                rel="noreferrer"
-                class="inline-flex items-center gap-2 rounded-xl bg-white/5 px-3 py-2 text-sm font-medium text-neutral-100 ring-1 ring-white/10 transition hover:bg-white/10"
-              >
-                <span>Open</span>
-                <svg
-                  viewBox="0 0 24 24"
-                  class="h-4 w-4"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                >
-                  <path d="M7 17L17 7" />
-                  <path d="M9 7h8v8" />
-                </svg>
-              </a>
-            </div>
-          </article>
-
-
-            <article
-            class="rounded-2xl bg-white/[0.03] p-5 ring-1 ring-white/10 transition hover:-translate-y-1 hover:bg-white/[0.06]"
-          >
-            <h3 class="text-base font-semibold text-white">Repo Clock</h3>
-            <p class="mt-2 text-sm leading-relaxed text-neutral-300">
-              Small Discord bot that lets you clock in & clock out.
-            </p>
-            <div class="mt-4">
-              <a
-                href="https://github.com/lambdaf-org/clock"
-                target="_blank"
-                rel="noreferrer"
-                class="inline-flex items-center gap-2 rounded-xl bg-white/5 px-3 py-2 text-sm font-medium text-neutral-100 ring-1 ring-white/10 transition hover:bg-white/10"
-              >
-                <span>Open</span>
-                <svg
-                  viewBox="0 0 24 24"
-                  class="h-4 w-4"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                >
-                  <path d="M7 17L17 7" />
-                  <path d="M9 7h8v8" />
-                </svg>
-              </a>
-            </div>
-          </article>
-
-
-            <article
-            class="rounded-2xl bg-white/[0.03] p-5 ring-1 ring-white/10 transition hover:-translate-y-1 hover:bg-white/[0.06]"
-          >
-            <h3 class="text-base font-semibold text-white">Repo Clock</h3>
-            <p class="mt-2 text-sm leading-relaxed text-neutral-300">
-              Small Discord bot that lets you clock in & clock out.
-            </p>
-            <div class="mt-4">
-              <a
-                href="https://github.com/lambdaf-org/clock"
-                target="_blank"
-                rel="noreferrer"
-                class="inline-flex items-center gap-2 rounded-xl bg-white/5 px-3 py-2 text-sm font-medium text-neutral-100 ring-1 ring-white/10 transition hover:bg-white/10"
-              >
-                <span>Open</span>
-                <svg
-                  viewBox="0 0 24 24"
-                  class="h-4 w-4"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                >
-                  <path d="M7 17L17 7" />
-                  <path d="M9 7h8v8" />
-                </svg>
-              </a>
-            </div>
-          </article>
-
-
-            <article
-            class="rounded-2xl bg-white/[0.03] p-5 ring-1 ring-white/10 transition hover:-translate-y-1 hover:bg-white/[0.06]"
-          >
-            <h3 class="text-base font-semibold text-white">Repo Clock</h3>
-            <p class="mt-2 text-sm leading-relaxed text-neutral-300">
-              Small Discord bot that lets you clock in & clock out.
-            </p>
-            <div class="mt-4">
-              <a
-                href="https://github.com/lambdaf-org/clock"
-                target="_blank"
-                rel="noreferrer"
-                class="inline-flex items-center gap-2 rounded-xl bg-white/5 px-3 py-2 text-sm font-medium text-neutral-100 ring-1 ring-white/10 transition hover:bg-white/10"
-              >
-                <span>Open</span>
-                <svg
-                  viewBox="0 0 24 24"
-                  class="h-4 w-4"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                >
-                  <path d="M7 17L17 7" />
-                  <path d="M9 7h8v8" />
-                </svg>
-              </a>
-            </div>
-          </article>
-
-            <article
-            class="rounded-2xl bg-white/[0.03] p-5 ring-1 ring-white/10 transition hover:-translate-y-1 hover:bg-white/[0.06]"
-          >
-            <h3 class="text-base font-semibold text-white">Repo Clock</h3>
-            <p class="mt-2 text-sm leading-relaxed text-neutral-300">
-              Small Discord bot that lets you clock in & clock out.
-            </p>
-            <div class="mt-4">
-              <a
-                href="https://github.com/lambdaf-org/clock"
                 target="_blank"
                 rel="noreferrer"
                 class="inline-flex items-center gap-2 rounded-xl bg-white/5 px-3 py-2 text-sm font-medium text-neutral-100 ring-1 ring-white/10 transition hover:bg-white/10"
