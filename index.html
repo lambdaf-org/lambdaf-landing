@@ -145,6 +145,37 @@
         width: min(52vh, 520px);
       }
 
+      /* --- Tier bar fill --- */
+      @keyframes barFill {
+        from {
+          width: 0%;
+        }
+        to {
+          width: var(--bar-w);
+        }
+      }
+      .bar-fill {
+        width: 0%;
+        animation: barFill 0.6s ease-out forwards;
+        animation-play-state: paused;
+      }
+      .bar-fill.running {
+        animation-play-state: running;
+      }
+
+      @keyframes emberPulse {
+        0%,
+        100% {
+          opacity: 0.4;
+        }
+        50% {
+          opacity: 0.8;
+        }
+      }
+      .ember {
+        animation: emberPulse 3s ease-in-out infinite;
+      }
+
       /* Respect reduced motion */
       @media (prefers-reduced-motion: reduce) {
         .logo-anvil,
@@ -152,12 +183,20 @@
         .logo-glow {
           animation: none !important;
         }
+        .bar-fill {
+          animation: none !important;
+          width: var(--bar-w);
+        }
+        .ember {
+          animation: none !important;
+          opacity: 0.6;
+        }
       }
     </style>
   </head>
 
   <body
-    class="bg-neutral-950 text-neutral-100 antialiased"
+    class="flex min-h-screen flex-col bg-neutral-950 text-neutral-100 antialiased"
     style="
       background:
         radial-gradient(
@@ -188,10 +227,10 @@
       </div>
     </div>
 
-    <main class="relative">
+    <main class="relative flex-1">
       <!-- HERO -->
       <section class="mx-auto max-w-6xl px-6 pb-10 pt-16">
-        <div class="flex flex-col items-center text-center">
+        <div class="flex flex-col items-start">
           <!-- Layered logo -->
           <div class="logo-wrap mb-5 h-24 w-24 md:h-28 md:w-28">
             <div class="logo-glow"></div>
@@ -222,7 +261,7 @@
             actually usable.
           </p>
 
-          <div class="mt-6 flex flex-wrap justify-center gap-3">
+          <div class="mt-6 flex flex-wrap gap-3">
             <a
               href="#projects"
               class="rounded-xl bg-amber-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-amber-500 active:scale-[0.99]"
@@ -254,16 +293,248 @@
           </p>
         </div>
 
-        <div class="mt-8 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          <!-- CARD -->
+        <!-- Cards share row heights via subgrid -->
+        <div
+          class="mt-8 grid gap-4 md:grid-cols-2"
+          style="grid-template-rows: auto 1fr auto auto auto auto auto"
+        >
+          <!-- CLOCK -->
           <article
             class="rounded-2xl bg-white/[0.03] p-5 ring-1 ring-white/10 transition hover:-translate-y-1 hover:bg-white/[0.06]"
+            style="
+              display: grid;
+              grid-row: span 7;
+              grid-template-rows: subgrid;
+              row-gap: 0;
+            "
           >
-            <h3 class="text-base font-semibold text-white">Clock</h3>
-            <p class="mt-2 text-sm leading-relaxed text-neutral-300">
-              Small Discord bot that lets you clock in & clock out.
+            <!-- row 1: title -->
+            <h3 class="self-start text-base font-semibold text-white">
+              Clock
+            </h3>
+            <!-- row 2: desc -->
+            <p
+              class="mt-2 self-start text-sm leading-relaxed text-neutral-300"
+            >
+              Discord time-tracking bot. Clock in, switch activities, view
+              leaderboards and breakdowns. Every Monday at midnight, a
+              semantic classifier assigns roles based on what you worked on.
             </p>
-            <div class="mt-4">
+            <!-- row 3: chips -->
+            <div class="mt-3 flex flex-wrap gap-1.5 self-start">
+              <span
+                class="rounded-md bg-white/5 px-2 py-0.5 text-xs text-neutral-400 ring-1 ring-white/10"
+                >Rust</span
+              >
+              <span
+                class="rounded-md bg-white/5 px-2 py-0.5 text-xs text-neutral-400 ring-1 ring-white/10"
+                >SQLite</span
+              >
+              <span
+                class="rounded-md bg-white/5 px-2 py-0.5 text-xs text-neutral-400 ring-1 ring-white/10"
+                >Serenity</span
+              >
+              <span
+                class="rounded-md bg-white/5 px-2 py-0.5 text-xs text-neutral-400 ring-1 ring-white/10"
+                >Candle · MiniLM</span
+              >
+            </div>
+            <!-- row 4: feature heading -->
+            <div class="mt-5 self-start border-t border-white/5 pt-5">
+              <p
+                class="text-xs font-medium uppercase tracking-widest text-neutral-500"
+              >
+                Features
+              </p>
+            </div>
+            <!-- row 5: feature content -->
+            <div class="mt-3 space-y-1.5 self-start">
+              <p class="text-xs text-neutral-400">
+                Clock in/out with activity tracking and aliases
+              </p>
+              <p class="text-xs text-neutral-400">
+                Weekly leaderboards and per-user breakdowns
+              </p>
+              <p class="text-xs text-neutral-400">
+                Semantic role assignment via sentence embeddings
+              </p>
+              <p class="text-xs text-neutral-400">
+                Auto-reset with summary posts every Monday
+              </p>
+            </div>
+            <!-- row 6: demo -->
+            <div class="mt-4 self-start border-t border-white/5 pt-4">
+              <p
+                class="mb-2 text-xs font-medium uppercase tracking-widest text-neutral-500"
+              >
+                Demo
+              </p>
+              <div class="space-y-2" id="clock-tiers">
+                <div class="flex items-center gap-3">
+                  <div class="w-20 flex-shrink-0">
+                    <div
+                      class="h-1.5 overflow-hidden rounded-full bg-white/5"
+                    >
+                      <div
+                        class="bar-fill h-full rounded-full"
+                        style="
+                          --bar-w: 16%;
+                          background: #95a5a6;
+                          animation-delay: 0.1s;
+                        "
+                      ></div>
+                    </div>
+                  </div>
+                  <span
+                    class="whitespace-nowrap font-mono text-xs"
+                    style="color: #95a5a6"
+                    >Grunt</span
+                  >
+                  <span
+                    class="ml-auto text-[10px] tabular-nums text-neutral-600"
+                    >0h</span
+                  >
+                </div>
+                <div class="flex items-center gap-3">
+                  <div class="w-20 flex-shrink-0">
+                    <div
+                      class="h-1.5 overflow-hidden rounded-full bg-white/5"
+                    >
+                      <div
+                        class="bar-fill h-full rounded-full"
+                        style="
+                          --bar-w: 33%;
+                          background: #3498db;
+                          animation-delay: 0.2s;
+                        "
+                      ></div>
+                    </div>
+                  </div>
+                  <span
+                    class="whitespace-nowrap font-mono text-xs"
+                    style="color: #3498db"
+                    >〔⟫〕Workhorse</span
+                  >
+                  <span
+                    class="ml-auto text-[10px] tabular-nums text-neutral-600"
+                    >20h</span
+                  >
+                </div>
+                <div class="flex items-center gap-3">
+                  <div class="w-20 flex-shrink-0">
+                    <div
+                      class="h-1.5 overflow-hidden rounded-full bg-white/5"
+                    >
+                      <div
+                        class="bar-fill h-full rounded-full"
+                        style="
+                          --bar-w: 50%;
+                          background: #2ecc71;
+                          animation-delay: 0.3s;
+                        "
+                      ></div>
+                    </div>
+                  </div>
+                  <span
+                    class="whitespace-nowrap font-mono text-xs"
+                    style="color: #2ecc71"
+                    >〔⟫⟫〕𝐵𝑒𝑎𝑐𝑜𝑛</span
+                  >
+                  <span
+                    class="ml-auto text-[10px] tabular-nums text-neutral-600"
+                    >40h</span
+                  >
+                </div>
+                <div class="flex items-center gap-3">
+                  <div class="w-20 flex-shrink-0">
+                    <div
+                      class="h-1.5 overflow-hidden rounded-full bg-white/5"
+                    >
+                      <div
+                        class="bar-fill h-full rounded-full"
+                        style="
+                          --bar-w: 66%;
+                          background: #f1c40f;
+                          animation-delay: 0.4s;
+                        "
+                      ></div>
+                    </div>
+                  </div>
+                  <span
+                    class="whitespace-nowrap font-mono text-xs"
+                    style="color: #f1c40f"
+                    >〔⟫⟫⟫〕𝐁𝐚𝐬𝐭𝐢𝐨𝐧</span
+                  >
+                  <span
+                    class="ml-auto text-[10px] tabular-nums text-neutral-600"
+                    >60h</span
+                  >
+                </div>
+                <div class="flex items-center gap-3">
+                  <div class="w-20 flex-shrink-0">
+                    <div
+                      class="h-1.5 overflow-hidden rounded-full bg-white/5"
+                    >
+                      <div
+                        class="bar-fill ember h-full rounded-full"
+                        style="
+                          --bar-w: 83%;
+                          background: linear-gradient(
+                            90deg,
+                            #e67e22,
+                            #e74c3c
+                          );
+                          animation-delay: 0.5s;
+                        "
+                      ></div>
+                    </div>
+                  </div>
+                  <span
+                    class="whitespace-nowrap font-mono text-xs"
+                    style="color: #e67e22"
+                    >〔⟫⟫⟫⟫〕𝗔𝗿𝗰𝗵𝗶𝘁𝗲𝗰𝘁</span
+                  >
+                  <span
+                    class="ml-auto text-[10px] tabular-nums text-neutral-600"
+                    >75h</span
+                  >
+                </div>
+                <div class="flex items-center gap-3">
+                  <div class="w-20 flex-shrink-0">
+                    <div
+                      class="h-1.5 overflow-hidden rounded-full bg-white/5"
+                    >
+                      <div
+                        class="bar-fill ember h-full rounded-full"
+                        style="
+                          --bar-w: 100%;
+                          background: linear-gradient(
+                            90deg,
+                            #e74c3c,
+                            #c0392b
+                          );
+                          animation-delay: 0.6s;
+                        "
+                      ></div>
+                    </div>
+                  </div>
+                  <span
+                    class="whitespace-nowrap font-mono text-xs"
+                    style="
+                      color: #e74c3c;
+                      text-shadow: 0 0 8px rgba(231, 76, 60, 0.3);
+                    "
+                    >〔⟫⟫⟫⟫⟫〕𝔅𝔢𝔡𝔯𝔬𝔠𝔨</span
+                  >
+                  <span
+                    class="ml-auto text-[10px] tabular-nums text-neutral-600"
+                    >90h</span
+                  >
+                </div>
+              </div>
+            </div>
+            <!-- row 7: link -->
+            <div class="mt-5 self-end">
               <a
                 href="https://github.com/lambdaf-org/clock"
                 target="_blank"
@@ -285,19 +556,58 @@
             </div>
           </article>
 
+          <!-- ARKHELIX -->
           <article
             class="rounded-2xl bg-white/[0.03] p-5 ring-1 ring-white/10 transition hover:-translate-y-1 hover:bg-white/[0.06]"
+            style="
+              display: grid;
+              grid-row: span 7;
+              grid-template-rows: subgrid;
+              row-gap: 0;
+            "
           >
-            <img
-              src="/images/arkhelix.png"
-              alt="ArkHelix preview"
-              class="mb-4 h-36 w-full rounded-xl object-cover ring-1 ring-white/10"
-            />
-            <h3 class="text-base font-semibold text-white">ArkHelix</h3>
-            <p class="mt-2 text-sm leading-relaxed text-neutral-300">
-              A web-based breeding & mutation manager for ARK: Survival Ascended
+            <!-- row 1: title -->
+            <h3 class="self-start text-base font-semibold text-white">
+              ArkHelix
+            </h3>
+            <!-- row 2: desc -->
+            <p
+              class="mt-2 self-start text-sm leading-relaxed text-neutral-300"
+            >
+              A web-based breeding & mutation manager for ARK: Survival
+              Ascended
             </p>
-            <div class="mt-4">
+            <!-- row 3: chips (empty placeholder) -->
+            <div class="mt-3"></div>
+            <!-- row 4: feature heading -->
+            <div class="mt-5 self-start border-t border-white/5 pt-5">
+              <p
+                class="text-xs font-medium uppercase tracking-widest text-neutral-500"
+              >
+                Features
+              </p>
+            </div>
+            <!-- row 5: feature content -->
+            <div class="mt-3 space-y-1.5 self-start">
+              <p class="text-xs text-neutral-400">
+                Stat tracking across generations
+              </p>
+              <p class="text-xs text-neutral-400">
+                Mutation stacking calculator
+              </p>
+              <p class="text-xs text-neutral-400">Visual lineage tree</p>
+            </div>
+            <!-- row 6: demo -->
+            <div class="mt-4 self-start border-t border-white/5 pt-4">
+              <p
+                class="mb-2 text-xs font-medium uppercase tracking-widest text-neutral-500"
+              >
+                Demo
+              </p>
+              <p class="text-xs italic text-neutral-500">Coming soon</p>
+            </div>
+            <!-- row 7: link -->
+            <div class="mt-5 self-end">
               <a
                 href="https://github.com/lambdaf-org/arkhelix"
                 target="_blank"
@@ -324,33 +634,36 @@
     </main>
 
     <!-- FOOTER -->
-    <footer class="relative border-t border-white/10">
-      <div class="mx-auto max-w-6xl px-6 py-10 text-center">
-        <p class="text-sm font-semibold text-white">Lambdaf-org</p>
-        <p class="mt-1 text-sm text-neutral-400">
-          Minimal landing page. Static by design.
-        </p>
-
-        <div class="mt-4 flex justify-center gap-3">
-          <a
-            class="rounded-xl bg-white/5 px-4 py-2 text-sm font-medium text-neutral-100 ring-1 ring-white/10 transition hover:bg-white/10"
-            href="https://github.com/lambdaf-org"
-            target="_blank"
-            rel="noreferrer"
-            >GitHub</a
-          >
-        </div>
-
-        <p class="mt-6 text-xs text-neutral-500">
-          © <span id="y">2026</span> Lambdaf-org
-        </p>
+    <footer class="relative border-t border-white/5">
+      <div
+        class="mx-auto flex max-w-6xl flex-col items-center gap-2 px-6 py-8"
+      >
+        <span class="text-xs text-neutral-500"
+          >© <span id="y">2026</span> Lambdaf-org</span
+        >
       </div>
       <script>
         document.getElementById("y").textContent = new Date().getFullYear();
       </script>
     </footer>
+
+    <script>
+      const tierBox = document.getElementById("clock-tiers");
+      if (tierBox) {
+        const obs = new IntersectionObserver(
+          (entries) => {
+            for (const e of entries) {
+              if (!e.isIntersecting) continue;
+              e.target
+                .querySelectorAll(".bar-fill")
+                .forEach((b) => b.classList.add("running"));
+              obs.unobserve(e.target);
+            }
+          },
+          { threshold: 0.3 },
+        );
+        obs.observe(tierBox);
+      }
+    </script>
   </body>
 </html>
-
-
-
