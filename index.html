@@ -156,13 +156,9 @@
       }
       .bar-fill {
         width: 0%;
-        animation: barFill 0.6s ease-out forwards;
-        animation-play-state: paused;
+        transition: width 0.6s ease-out;
       }
-      .bar-fill.running {
-        animation-play-state: running;
-      }
-
+    
       @keyframes emberPulse {
         0%,
         100% {
@@ -648,22 +644,25 @@
     </footer>
 
     <script>
-      const tierBox = document.getElementById("clock-tiers");
-      if (tierBox) {
-        const obs = new IntersectionObserver(
-          (entries) => {
-            for (const e of entries) {
-              if (!e.isIntersecting) continue;
-              e.target
-                .querySelectorAll(".bar-fill")
-                .forEach((b) => b.classList.add("running"));
-              obs.unobserve(e.target);
-            }
-          },
-          { threshold: 0.3 },
-        );
-        obs.observe(tierBox);
+    setTimeout(() => {
+  const tierBox = document.getElementById("clock-tiers");
+  if (!tierBox) return;
+  const obs = new IntersectionObserver(
+    (entries) => {
+      for (const e of entries) {
+        if (!e.isIntersecting) continue;
+        e.target.querySelectorAll(".bar-fill").forEach((b, i) => {
+          setTimeout(() => {
+            b.style.width = getComputedStyle(b).getPropertyValue("--bar-w").trim();
+          }, i * 100);
+        });
+        obs.unobserve(e.target);
       }
+    },
+    { threshold: 0.3 },
+  );
+  obs.observe(tierBox);
+}, 1300);
     </script>
   </body>
 </html>
