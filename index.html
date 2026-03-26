@@ -551,79 +551,193 @@
               </a>
             </div>
           </article>
+          <!-- SYNTHESIS -->
+<article
+  class="rounded-2xl bg-white/[0.03] p-5 ring-1 ring-white/10 transition hover:-translate-y-1 hover:bg-white/[0.06]"
+  style="
+    display: grid;
+    grid-row: span 7;
+    grid-template-rows: subgrid;
+    row-gap: 0;
+  "
+>
+  <!-- row 1: title -->
+  <h3 class="self-start text-base font-semibold text-white">
+    synthesis
+  </h3>
+  <!-- row 2: desc -->
+  <p
+    class="mt-2 self-start text-sm leading-relaxed text-neutral-300"
+  >
+    Point it at a folder of documents for an interactive HTML briefing,
+    or use live transcription mode to capture lectures and meetings into
+    a structured transcript report.
+  </p>
+  <!-- row 3: chips -->
+  <div class="mt-3 flex flex-wrap gap-1.5 self-start">
+    <span
+      class="rounded-md bg-white/5 px-2 py-0.5 text-xs text-neutral-400 ring-1 ring-white/10"
+      >Python</span
+    >
+    <span
+      class="rounded-md bg-white/5 px-2 py-0.5 text-xs text-neutral-400 ring-1 ring-white/10"
+      >Claude API</span
+    >
+    <span
+      class="rounded-md bg-white/5 px-2 py-0.5 text-xs text-neutral-400 ring-1 ring-white/10"
+      >Whisper</span
+    >
+    <span
+      class="rounded-md bg-white/5 px-2 py-0.5 text-xs text-neutral-400 ring-1 ring-white/10"
+      >faster-whisper</span
+    >
+  </div>
+  <!-- row 4: feature heading -->
+  <div class="mt-5 self-start border-t border-white/5 pt-5">
+    <p
+      class="text-xs font-medium uppercase tracking-widest text-neutral-500"
+    >
+      Features
+    </p>
+  </div>
+  <!-- row 5: feature content -->
+  <div class="mt-3 space-y-1.5 self-start">
+    <p class="text-xs text-neutral-400">
+      Two-pass LLM extraction with hallucination-resistant confirmation
+    </p>
+    <p class="text-xs text-neutral-400">
+      Timeline briefings with TODAY line and expandable item cards
+    </p>
+    <p class="text-xs text-neutral-400">
+      Live mic or system audio transcription — no audio written to disk
+    </p>
+    <p class="text-xs text-neutral-400">
+      GitHub repo ingestion and multi-topic configs
+    </p>
+  </div>
+  <!-- row 6: demo -->
+  <div class="mt-4 self-start border-t border-white/5 pt-4">
+    <p
+      class="mb-3 text-xs font-medium uppercase tracking-widest text-neutral-500"
+    >
+      Demo
+    </p>
+    <!-- mode tabs -->
+    <div class="mb-3 flex gap-4">
+      <button
+        onclick="synthTab('doc')"
+        id="synthesis-tab-doc"
+        class="text-xs font-medium transition"
+        style="color: #1D9E75; background: none; border: none; padding: 0; cursor: pointer;"
+      >Document</button>
+      <button
+        onclick="synthTab('live')"
+        id="synthesis-tab-live"
+        class="text-xs transition"
+        style="color: rgb(115 115 115); background: none; border: none; padding: 0; cursor: pointer;"
+      >Live</button>
+    </div>
+    <!-- pipeline svg -->
+    <svg
+      width="100%"
+      viewBox="0 0 380 52"
+      xmlns="http://www.w3.org/2000/svg"
+      style="display: block; overflow: visible;"
+    >
+      <defs>
+        <style>
+          @keyframes synthesis-flow {
+            from { stroke-dashoffset: 30; }
+            to   { stroke-dashoffset: 0;  }
+          }
+          .synth-pipe {
+            stroke-dasharray: 4 4;
+            animation: synthesis-flow 1.2s linear infinite;
+          }
+        </style>
+        <marker id="synth-ah-doc" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+          <path d="M2 2L8 5L2 8" fill="none" stroke="#1D9E75" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </marker>
+        <marker id="synth-ah-live" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+          <path d="M2 2L8 5L2 8" fill="none" stroke="#7F77DD" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </marker>
+      </defs>
+ 
+      <!-- doc mode -->
+      <g id="synthesis-nodes-doc">
+        <rect x="0"   y="8" width="50" height="22" rx="5" fill="rgba(29,158,117,0.12)" stroke="rgba(29,158,117,0.35)" stroke-width="0.5"/>
+        <rect x="66"  y="8" width="54" height="22" rx="5" fill="rgba(29,158,117,0.12)" stroke="rgba(29,158,117,0.35)" stroke-width="0.5"/>
+        <rect x="136" y="8" width="46" height="22" rx="5" fill="rgba(29,158,117,0.12)" stroke="rgba(29,158,117,0.35)" stroke-width="0.5"/>
+        <rect x="198" y="8" width="52" height="22" rx="5" fill="rgba(29,158,117,0.12)" stroke="rgba(29,158,117,0.35)" stroke-width="0.5"/>
+        <rect x="266" y="8" width="60" height="22" rx="5" fill="rgba(29,158,117,0.20)" stroke="rgba(29,158,117,0.55)" stroke-width="0.8"/>
+        <text x="25"  y="21" text-anchor="middle" font-size="9" fill="rgba(29,158,117,0.9)"  font-family="ui-monospace,monospace">Ingest</text>
+        <text x="93"  y="21" text-anchor="middle" font-size="9" fill="rgba(29,158,117,0.9)"  font-family="ui-monospace,monospace">Extract</text>
+        <text x="159" y="21" text-anchor="middle" font-size="9" fill="rgba(29,158,117,0.9)"  font-family="ui-monospace,monospace">Synth</text>
+        <text x="224" y="21" text-anchor="middle" font-size="9" fill="rgba(29,158,117,0.9)"  font-family="ui-monospace,monospace">Render</text>
+        <text x="296" y="21" text-anchor="middle" font-size="9" fill="rgba(29,158,117,1.0)"  font-family="ui-monospace,monospace" font-weight="600">Briefing</text>
+        <line x1="50"  y1="19" x2="64"  y2="19" class="synth-pipe" stroke="#1D9E75" stroke-width="1" marker-end="url(#synth-ah-doc)"/>
+        <line x1="120" y1="19" x2="134" y2="19" class="synth-pipe" stroke="#1D9E75" stroke-width="1" marker-end="url(#synth-ah-doc)"/>
+        <line x1="182" y1="19" x2="196" y2="19" class="synth-pipe" stroke="#1D9E75" stroke-width="1" marker-end="url(#synth-ah-doc)"/>
+        <line x1="250" y1="19" x2="264" y2="19" class="synth-pipe" stroke="#1D9E75" stroke-width="1" marker-end="url(#synth-ah-doc)"/>
+        <text x="0" y="46" font-size="8" fill="rgba(29,158,117,0.4)" font-family="ui-monospace,monospace">docs / github repos → HTML briefing</text>
+      </g>
 
-          <!-- ARKHELIX -->
-          <article
-            class="rounded-2xl bg-white/[0.03] p-5 ring-1 ring-white/10 transition hover:-translate-y-1 hover:bg-white/[0.06]"
-            style="
-              display: grid;
-              grid-row: span 7;
-              grid-template-rows: subgrid;
-              row-gap: 0;
-            "
-          >
-            <!-- row 1: title -->
-            <h3 class="self-start text-base font-semibold text-white">
-              ArkHelix
-            </h3>
-            <!-- row 2: desc -->
-            <p
-              class="mt-2 self-start text-sm leading-relaxed text-neutral-300"
-            >
-              A web-based breeding & mutation manager for ARK: Survival
-              Ascended
-            </p>
-            <!-- row 3: chips (empty placeholder) -->
-            <div class="mt-3"></div>
-            <!-- row 4: feature heading -->
-            <div class="mt-5 self-start border-t border-white/5 pt-5">
-              <p
-                class="text-xs font-medium uppercase tracking-widest text-neutral-500"
-              >
-                Features
-              </p>
-            </div>
-            <!-- row 5: feature content -->
-            <div class="mt-3 space-y-1.5 self-start">
-              <p class="text-xs text-neutral-400">
-                Stat tracking across generations
-              </p>
-              <p class="text-xs text-neutral-400">
-                Mutation stacking calculator
-              </p>
-              <p class="text-xs text-neutral-400">Visual lineage tree</p>
-            </div>
-            <!-- row 6: demo -->
-            <div class="mt-4 self-start border-t border-white/5 pt-4">
-              <p
-                class="mb-2 text-xs font-medium uppercase tracking-widest text-neutral-500"
-              >
-                Demo
-              </p>
-              <p class="text-xs italic text-neutral-500">Coming soon</p>
-            </div>
-            <!-- row 7: link -->
-            <div class="mt-5 self-end">
-              <a
-                href="https://github.com/lambdaf-org/arkhelix"
-                target="_blank"
-                rel="noreferrer"
-                class="inline-flex items-center gap-2 rounded-xl bg-white/5 px-3 py-2 text-sm font-medium text-neutral-100 ring-1 ring-white/10 transition hover:bg-white/10"
-              >
-                <span>Open</span>
-                <svg
-                  viewBox="0 0 24 24"
-                  class="h-4 w-4"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                >
-                  <path d="M7 17L17 7" />
-                  <path d="M9 7h8v8" />
-                </svg>
-              </a>
-            </div>
-          </article>
+      <!-- live mode (hidden by default) -->
+      <g id="synthesis-nodes-live" style="display: none;">
+        <rect x="0"   y="8" width="68" height="22" rx="5" fill="rgba(127,119,221,0.12)" stroke="rgba(127,119,221,0.35)" stroke-width="0.5"/>
+        <rect x="84"  y="8" width="54" height="22" rx="5" fill="rgba(127,119,221,0.12)" stroke="rgba(127,119,221,0.35)" stroke-width="0.5"/>
+        <rect x="154" y="8" width="46" height="22" rx="5" fill="rgba(127,119,221,0.12)" stroke="rgba(127,119,221,0.35)" stroke-width="0.5"/>
+        <rect x="216" y="8" width="52" height="22" rx="5" fill="rgba(127,119,221,0.12)" stroke="rgba(127,119,221,0.35)" stroke-width="0.5"/>
+        <rect x="284" y="8" width="54" height="22" rx="5" fill="rgba(127,119,221,0.20)" stroke="rgba(127,119,221,0.55)" stroke-width="0.8"/>
+        <text x="34"  y="21" text-anchor="middle" font-size="9" fill="rgba(127,119,221,0.9)" font-family="ui-monospace,monospace">Transcribe</text>
+        <text x="111" y="21" text-anchor="middle" font-size="9" fill="rgba(127,119,221,0.9)" font-family="ui-monospace,monospace">Extract</text>
+        <text x="177" y="21" text-anchor="middle" font-size="9" fill="rgba(127,119,221,0.9)" font-family="ui-monospace,monospace">Synth</text>
+        <text x="242" y="21" text-anchor="middle" font-size="9" fill="rgba(127,119,221,0.9)" font-family="ui-monospace,monospace">Render</text>
+        <text x="311" y="21" text-anchor="middle" font-size="9" fill="rgba(127,119,221,1.0)" font-family="ui-monospace,monospace" font-weight="600">Report</text>
+        <line x1="68"  y1="19" x2="82"  y2="19" class="synth-pipe" stroke="#7F77DD" stroke-width="1" marker-end="url(#synth-ah-live)"/>
+        <line x1="138" y1="19" x2="152" y2="19" class="synth-pipe" stroke="#7F77DD" stroke-width="1" marker-end="url(#synth-ah-live)"/>
+        <line x1="200" y1="19" x2="214" y2="19" class="synth-pipe" stroke="#7F77DD" stroke-width="1" marker-end="url(#synth-ah-live)"/>
+        <line x1="268" y1="19" x2="282" y2="19" class="synth-pipe" stroke="#7F77DD" stroke-width="1" marker-end="url(#synth-ah-live)"/>
+        <text x="0" y="46" font-size="8" fill="rgba(127,119,221,0.4)" font-family="ui-monospace,monospace">mic / system audio → HTML report</text>
+      </g>
+    </svg>
+  </div>
+  <!-- row 7: link -->
+  <div class="mt-5 self-end">
+    <a
+      href="https://github.com/lambdaf-org/synthesis"
+      target="_blank"
+      rel="noreferrer"
+      class="inline-flex items-center gap-2 rounded-xl bg-white/5 px-3 py-2 text-sm font-medium text-neutral-100 ring-1 ring-white/10 transition hover:bg-white/10"
+    >
+      <span>Open</span>
+      <svg
+        viewBox="0 0 24 24"
+        class="h-4 w-4"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+      >
+        <path d="M7 17L17 7" />
+        <path d="M9 7h8v8" />
+      </svg>
+    </a>
+  </div>
+</article>
+
+<script>
+  function synthTab(mode) {
+    var isDoc = mode === 'doc';
+    document.getElementById('synthesis-nodes-doc').style.display  = isDoc ? '' : 'none';
+    document.getElementById('synthesis-nodes-live').style.display = isDoc ? 'none' : '';
+    document.getElementById('synthesis-tab-doc').style.color      = isDoc ? '#1D9E75'          : 'rgb(115 115 115)';
+    document.getElementById('synthesis-tab-doc').style.fontWeight  = isDoc ? '500' : '400';
+    document.getElementById('synthesis-tab-live').style.color     = isDoc ? 'rgb(115 115 115)' : '#7F77DD';
+    document.getElementById('synthesis-tab-live').style.fontWeight = isDoc ? '400' : '500';
+  }
+</script>
+
+
           <!-- Duplicate cards as needed -->
         </div>
       </section>
