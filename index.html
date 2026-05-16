@@ -738,6 +738,222 @@
 </script>
 
 
+
+<!-- MONEY COUNTER -->
+<article
+  class="rounded-2xl bg-white/[0.03] p-5 ring-1 ring-white/10 transition hover:-translate-y-1 hover:bg-white/[0.06]"
+  style="
+    display: grid;
+    grid-row: span 7;
+    grid-template-rows: subgrid;
+    row-gap: 0;
+  "
+>
+  <!-- row 1: title -->
+  <h3 class="self-start text-base font-semibold text-white">
+    Money Counter
+  </h3>
+
+  <!-- row 2: desc -->
+  <p class="mt-2 self-start text-sm leading-relaxed text-neutral-300">
+    Minimal savings goal tracker. Create multiple counters, rename them,
+    set target amounts, update progress, and instantly see how close you are
+    to each goal.
+  </p>
+
+  <!-- row 3: chips -->
+  <div class="mt-3 flex flex-wrap gap-1.5 self-start">
+    <span
+      class="rounded-md bg-white/5 px-2 py-0.5 text-xs text-neutral-400 ring-1 ring-white/10"
+      >Next.js</span
+    >
+    <span
+      class="rounded-md bg-white/5 px-2 py-0.5 text-xs text-neutral-400 ring-1 ring-white/10"
+      >TypeScript</span
+    >
+    <span
+      class="rounded-md bg-white/5 px-2 py-0.5 text-xs text-neutral-400 ring-1 ring-white/10"
+      >Tailwind</span
+    >
+    <span
+      class="rounded-md bg-white/5 px-2 py-0.5 text-xs text-neutral-400 ring-1 ring-white/10"
+      >localStorage</span
+    >
+  </div>
+
+  <!-- row 4: feature heading -->
+  <div class="mt-5 self-start border-t border-white/5 pt-5">
+    <p class="text-xs font-medium uppercase tracking-widest text-neutral-500">
+      Features
+    </p>
+  </div>
+
+  <!-- row 5: feature content -->
+  <div class="mt-3 space-y-1.5 self-start">
+    <p class="text-xs text-neutral-400">
+      Add and manage multiple savings counters
+    </p>
+    <p class="text-xs text-neutral-400">
+      Rename goals and edit target/current amounts
+    </p>
+    <p class="text-xs text-neutral-400">
+      Progress bars with remaining amount and ETA
+    </p>
+    <p class="text-xs text-neutral-400">
+      Browser-based saving with localStorage
+    </p>
+  </div>
+
+ <!-- row 6: demo -->
+<div class="mt-4 self-start border-t border-white/5 pt-4">
+  <p
+    class="mb-3 text-xs font-medium uppercase tracking-widest text-neutral-500"
+  >
+    Demo
+  </p>
+
+  <div class="rounded-2xl border border-white/10 bg-black/20 p-3">
+    <!-- mini app header -->
+    <div class="mb-3 flex items-center justify-between">
+      <div>
+        <p class="text-[10px] uppercase tracking-[0.2em] text-neutral-500">
+          My Counters
+        </p>
+        <p class="text-sm font-medium text-white">3 active goals</p>
+      </div>
+
+      <div
+        class="rounded-lg bg-emerald-500/10 px-2.5 py-1 text-[10px] font-medium text-emerald-400 ring-1 ring-emerald-500/20"
+      >
+        + New Counter
+      </div>
+    </div>
+
+    <!-- counters -->
+    <div class="space-y-2.5">
+      <!-- counter 1 -->
+      <div class="rounded-xl bg-white/[0.03] p-3 ring-1 ring-white/8">
+        <div class="mb-2 flex items-start justify-between gap-3">
+          <div>
+            <p class="text-xs font-medium text-white">Freedom Fund</p>
+            <p class="text-[10px] text-neutral-500">CHF 12,400 / CHF 30,000</p>
+          </div>
+          <span class="text-[10px] font-medium text-neutral-400">41%</span>
+        </div>
+
+        <div class="h-1.5 overflow-hidden rounded-full bg-white/5">
+          <div
+            class="h-full rounded-full"
+            style="
+              width: 41%;
+              background: linear-gradient(90deg, #60a5fa, #34d399);
+            "
+          ></div>
+        </div>
+
+        <div class="mt-2 flex items-center justify-between text-[10px] text-neutral-500">
+          <span>Left: CHF 17,600</span>
+          <span>ETA: 6 mo</span>
+        </div>
+      </div>
+
+      <!-- counter 2 -->
+      <div class="rounded-xl bg-white/[0.03] p-3 ring-1 ring-white/8">
+        <div class="mb-2 flex items-start justify-between gap-3">
+          <div>
+            <p class="text-xs font-medium text-white">App Launch</p>
+            <p class="text-[10px] text-neutral-500">CHF 4,800 / CHF 10,000</p>
+          </div>
+          <span class="text-[10px] font-medium text-neutral-400">48%</span>
+        </div>
+
+        <div class="h-1.5 overflow-hidden rounded-full bg-white/5">
+          <div
+            class="h-full rounded-full"
+            style="
+              width: 48%;
+              background: linear-gradient(90deg, #a78bfa, #f472b6);
+            "
+          ></div>
+        </div>
+
+        <div class="mt-2 flex items-center justify-between text-[10px] text-neutral-500">
+          <span>Left: CHF 5,200</span>
+          <span>ETA: 2 mo</span>
+        </div>
+      </div>
+
+      <!-- counter 3 -->
+      <div class="rounded-xl bg-white/[0.03] p-3 ring-1 ring-white/8">
+        <div class="mb-2 flex items-start justify-between gap-3">
+          <div>
+            <p class="text-xs font-medium text-white">Emergency Fund</p>
+            <p class="text-[10px] text-neutral-500">CHF 8,000 / CHF 8,000</p>
+          </div>
+          <span class="text-[10px] font-medium text-emerald-400">100%</span>
+        </div>
+
+        <div class="h-1.5 overflow-hidden rounded-full bg-white/5">
+          <div
+            class="h-full rounded-full"
+            style="
+              width: 100%;
+              background: linear-gradient(90deg, #34d399, #10b981);
+            "
+          ></div>
+        </div>
+
+        <div class="mt-2 flex items-center justify-between text-[10px] text-neutral-500">
+          <span>Completed</span>
+          <span>Ready</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- footer stats -->
+    <div class="mt-3 grid grid-cols-3 gap-2">
+      <div class="rounded-lg bg-white/[0.03] px-2 py-2 text-center ring-1 ring-white/5">
+        <p class="text-[9px] uppercase tracking-wide text-neutral-500">Saved</p>
+        <p class="mt-1 text-[11px] font-medium text-white">CHF 25.2k</p>
+      </div>
+
+      <div class="rounded-lg bg-white/[0.03] px-2 py-2 text-center ring-1 ring-white/5">
+        <p class="text-[9px] uppercase tracking-wide text-neutral-500">Goals</p>
+        <p class="mt-1 text-[11px] font-medium text-white">3</p>
+      </div>
+
+      <div class="rounded-lg bg-white/[0.03] px-2 py-2 text-center ring-1 ring-white/5">
+        <p class="text-[9px] uppercase tracking-wide text-neutral-500">Done</p>
+        <p class="mt-1 text-[11px] font-medium text-white">1</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <!-- row 7: link -->
+  <div class="mt-5 self-end">
+    <a
+      href="https://github.com/lambdaf-org/money-counter"
+      target="_blank"
+      rel="noreferrer"
+      class="inline-flex items-center gap-2 rounded-xl bg-white/5 px-3 py-2 text-sm font-medium text-neutral-100 ring-1 ring-white/10 transition hover:bg-white/10"
+    >
+      <span>Open</span>
+      <svg
+        viewBox="0 0 24 24"
+        class="h-4 w-4"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+      >
+        <path d="M7 17L17 7" />
+        <path d="M9 7h8v8" />
+      </svg>
+    </a>
+  </div>
+</article>
+
+
           <!-- Duplicate cards as needed -->
         </div>
       </section>
