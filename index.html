@@ -11,7 +11,7 @@
     <meta name="theme-color" content="#faf6ee" />
     <meta property="og:type" content="website" />
     <meta property="og:title" content="Lambdaforge: tools that show their work" />
-    <meta property="og:description" content="Software built to be used, then opened. Browse the catalogue by stack and read how each tool works." />
+    <meta property="og:description" content="Software built to be used, then open-sourced. Browse the catalogue by stack and read how each tool works." />
     <meta property="og:image" content="lambdaforge-logo.png" />
     <meta name="twitter:card" content="summary_large_image" />
     <link rel="icon" type="image/png" href="favicon.png" />
@@ -256,8 +256,8 @@
               <span class="kicker dash">Open-source workshop</span>
               <h1>Tools that<span class="b">show their work.</span></h1>
               <div class="hero-rule" id="heroRule"></div>
-              <p class="lead">Software built to be used, then opened. The ones that answer you tell you <em>where the answer came from</em>.</p>
-              <p class="hero-meta"><b>Eleven repositories.</b><br />Rust, Python, Web, and Claude Code.</p>
+              <p class="lead">Software built to be used, then open-sourced. The ones that answer you tell you <em>where the answer came from</em>.</p>
+              <p class="hero-meta"><b><span id="repoCount"></span> repositories.</b><br /><span id="stackList"></span></p>
               <div class="hero-cta">
                 <a class="btn btn-ink" href="#tools">Browse the catalogue</a>
                 <a class="btn btn-ghost" href="https://github.com/lambdaf-org" target="_blank" rel="noreferrer">GitHub ↗</a>
@@ -350,11 +350,11 @@
       };
 
       const TOOLS = [
-        { name: "Overseer", repo: "overseer", stack: "Claude Code", scope: "PROTOCOL / NO APP CODE", tags: ["Claude Code","Knowledge graph"],
+        { name: "overseer", repo: "overseer", stack: "Claude Code", scope: "PROTOCOL / NO APP CODE", tags: ["Claude Code","Knowledge graph"],
           essence: "It folds your goals, the people around you, and your work into one graph, then answers what you should focus on this week.",
           mech: "Plain files plus one protocol (OVERSEER.md): Claude Code folds your corpus into a single graph in brain/, records dated events instead of status, and works out the current state on demand.",
           disc: "It pushes back: when what you say drifts from what your record shows, it says so.", by: ["191-iota"] },
-        { name: "Saul Swissman", repo: "saul-swissman", stack: "Claude Code", scope: "SWISS LAW / NO APP CODE", tags: ["Claude Code","RAG","Fedlex"],
+        { name: "saul-swissman", repo: "saul-swissman", stack: "Claude Code", scope: "SWISS LAW / NO APP CODE", tags: ["Claude Code","RAG","Fedlex"],
           essence: "It answers questions on Swiss federal law and backs every statement with the article, the SR number, and the verbatim wording.",
           mech: "It reads the statutes in corpus/ch/, routes to the governing articles through a small register, and quotes them word for word. A statement without an article and a quote does not get made.",
           disc: "When a provision is not in its corpus, it names the gap and points to Fedlex.", by: ["191-iota"] },
@@ -366,15 +366,15 @@
           essence: "It turns a folder of documents into one self-contained interactive briefing, or transcribes a meeting live into a structured report.",
           mech: "It ingests PDFs, DOCX, and repos, runs a two-pass extraction plus an independent confirmation pass, and renders one HTML file: a timeline with expandable cards and a game plan.",
           disc: "An item ships only if both passes agree and it carries a grounded source quote, and live audio is never written to disk.", by: ["191-iota"] },
-        { name: "The Factory", repo: "the-factory", stack: "Claude Code", scope: "AGENT SCAFFOLD / ANY DOMAIN", tags: ["Claude Code","Agent","Markdown"],
+        { name: "the-factory", repo: "the-factory", stack: "Claude Code", scope: "AGENT SCAFFOLD / ANY DOMAIN", tags: ["Claude Code","Agent","Markdown"],
           essence: "It runs Claude Code as an autonomous worker that reads your context and task and does the job end to end.",
           mech: "It reads your context folder and task, writes output to a new folder under deliverable/, and keeps its own notes/ so the next run resumes warm. It runs interactively or headless.",
           disc: "Output only ever lands in a new deliverable/ folder, and your context/ is left untouched.", by: ["191-iota"] },
-        { name: "Neuro", repo: "neuro", stack: "Rust", scope: "RUST AND VUE / REAL-TIME", tags: ["Rust","Vue 3","WebSocket","PostgreSQL"],
+        { name: "neuro", repo: "neuro", stack: "Rust", scope: "RUST AND VUE / REAL-TIME", tags: ["Rust","Vue 3","WebSocket","PostgreSQL"],
           essence: "It runs five short cognitive tests and returns a five-part score profile with per-game leaderboards.",
           mech: "It administers tasks modelled on established psychometric paradigms over a real-time WebSocket pipeline (Rust/Actix-Web and Vue 3) and records fine-grained metrics to PostgreSQL.",
           disc: "Five separate ability scores, with anticipatory and lapse trials dropped so each one stays meaningful.", by: ["191-iota","Ajith1412"] },
-        { name: "ClockBot", repo: "clock", stack: "Rust", scope: "RUST / DISCORD BOT", tags: ["Rust","Discord","SQLite","plotters"],
+        { name: "clock-bot", repo: "clock", stack: "Rust", scope: "RUST / DISCORD BOT", tags: ["Rust","Discord","SQLite","plotters"],
           essence: "It tracks work from Discord and reports back weekly hours, rankings, and PNG charts.",
           mech: "It tracks time per activity in SQLite with /clock in and out, leaderboards, and stats, plus a Monday 00:00 Europe/Zurich weekly report that archives the week and assigns earned roles.",
           disc: "Charts render on a pure-Rust backend with an embedded font, so the runtime image needs no system font packages.", by: ["191-iota","Thirstums","Ajith1412"] },
@@ -382,15 +382,15 @@
           essence: "It carries a new key from your base-language JSON across every other language file.",
           mech: "A small Rust CLI for projects that keep one JSON file per language. Running transl <header> <key> <value> <base> adds a property to the base language and syncs it into the others.",
           disc: "A single MIT-licensed binary that touches only your language JSON files.", by: ["191-iota"] },
-        { name: "MoneyForge", repo: "MoneyForge", stack: "Web", scope: "NEXT.JS / LOCAL-ONLY", tags: ["Next.js","React","Tailwind"],
+        { name: "money-forge", repo: "MoneyForge", stack: "Web", scope: "NEXT.JS / LOCAL-ONLY", tags: ["Next.js","React","Tailwind"],
           essence: "It tracks savings goals and shows how many months each one needs to hit its target.",
           mech: "Each counter holds a name, target, balance, and monthly contribution. It shows percent progress and an ETA, with quick add and subtract buttons and a totals row across all goals.",
           disc: "No backend and no accounts: counters live in your browser's localStorage and never leave the device.", by: ["Thirstums"] },
-        { name: "GradeForge", repo: "GradeForge", stack: "Web", scope: "NEXT.JS / LOCAL-ONLY", tags: ["Next.js","TypeScript","i18n"],
-          essence: "It calculates grades for any country's system and prints the exact formula and rounding behind every average.",
-          mech: "A browser-only weighted-average calculator with around 20 country presets and a custom-scale builder. For every average it prints the inputs, the formula, and the rounding rule it applied.",
-          disc: "No accounts and no portal, and nothing leaves the page.", by: ["191-iota"] },
-        { name: "AlgoLeague", repo: "algoleague_frontend", stack: "Web", scope: "REAL-TIME CODE DUELS", tags: ["Real-time","Multiplayer","Judge"],
+        { name: "grade-forge", repo: "GradeForge", stack: "Web", scope: "NEXT.JS / LOCAL-ONLY", tags: ["Next.js","React","TypeScript"],
+          essence: "It calculates weighted averages for any grading system and shows the exact formula, inputs, weights, and rounding rule behind every result.",
+          mech: "A browser-only grade calculator for count-up systems like Switzerland or France, count-down systems like Germany or Austria, and letter or GPA scales. Pick a preset or build a custom scale, enter grades and weights, and it prints a full receipt: the weighted formula, progress, pass verdict, and the rounding rule it applied.",
+          disc: "No backend, no accounts, no telemetry: grades and example data live in your browser's localStorage and never leave the device.", by: ["191-iota","Thirstums"] },
+        { name: "algo-league", repo: "algoleague_frontend", stack: "Web", scope: "REAL-TIME CODE DUELS", tags: ["Real-time","Multiplayer","Judge0"],
           essence: "It runs real-time coding duels, ranked by how fast your solution actually runs and not just whether it passes. Realtime LeetCode, basically.",
           mech: "Players get the same problem at the same moment, each submission runs in a sandbox, and every solution is timed and ranked by percentile instead of a plain pass or fail. The language lineup grows over time.",
           disc: "You are ranked on real performance, with every player measured the same way.", by: ["191-iota","Ajith1412"] },
@@ -476,7 +476,11 @@
           </div>
         </div>`).join("");
       document.getElementById("foot-links").innerHTML = TOOLS.slice(0, 8).map(t => `<a href="${REPO}${esc(t.repo)}" target="_blank" rel="noreferrer">${esc(t.repo)}</a>`).join("");
-      try { document.getElementById("year").textContent = new Date().getFullYear(); } catch (e) {}
+      try {
+        document.getElementById("year").textContent = new Date().getFullYear();
+        document.getElementById("repoCount").textContent = TOOLS.length;
+        document.getElementById("stackList").textContent = [...new Set(TOOLS.map(t => t.stack))].join(", ");
+      } catch (e) {}
 
       render();
 
