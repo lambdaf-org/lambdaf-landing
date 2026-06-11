@@ -6,12 +6,12 @@
     <title>Lambdaforge · tools that show their work</title>
     <meta
       name="description"
-      content="Lambdaforge builds software to be used, then opens the source. A second brain, a Swiss-law counsel that quotes the statute, a chat-archive analyst, a docs-to-briefing pipeline, an agent scaffold. The ones that answer you tell you where the answer came from."
+      content="Lambdaforge builds software to be used, then opens the source. Browse the catalogue: a second brain, a Swiss-law counsel that quotes the statute, a chat-archive analyst, a docs-to-briefing pipeline, an agent scaffold, and more. The ones that answer you tell you where the answer came from."
     />
     <meta name="theme-color" content="#faf6ee" />
     <meta property="og:type" content="website" />
     <meta property="og:title" content="Lambdaforge · tools that show their work" />
-    <meta property="og:description" content="Software built to be used, then opened. A second brain, a Swiss-law counsel that quotes the statute, a chat-archive analyst, a docs-to-briefing pipeline, an agent scaffold. The ones that answer you tell you where the answer came from." />
+    <meta property="og:description" content="Software built to be used, then opened. Filter the catalogue by stack, search by name, and open any tool to see how it works." />
     <meta property="og:image" content="lambdaforge-logo.png" />
     <meta name="twitter:card" content="summary_large_image" />
     <link rel="icon" type="image/png" href="favicon.png" />
@@ -36,10 +36,12 @@
         --red: #b91f1f;
         --red-deep: #9c1717;
         --red-tint: rgba(185, 31, 31, 0.06);
+        --ember: #ff7a2f;
+        --shadow: 0 1px 0 rgba(28, 28, 28, 0.04);
       }
 
       * { box-sizing: border-box; }
-      html { scroll-behavior: smooth; scroll-padding-top: 4.5rem; }
+      html { scroll-behavior: smooth; scroll-padding-top: 9.5rem; }
 
       body {
         margin: 0;
@@ -53,19 +55,39 @@
       }
 
       a { color: inherit; text-decoration: none; }
+      img { display: block; }
 
-      /* page-load transition (only when JS + motion allowed) */
-      html.intro body { opacity: 0; }
-      html.intro.ready body { opacity: 1; transition: opacity 0.6s ease; }
+      ::selection { background: var(--red); color: var(--paper); }
+
+      :focus-visible {
+        outline: 2px solid var(--red);
+        outline-offset: 2px;
+      }
 
       .slab { font-family: "Zilla Slab", Georgia, serif; }
       .mono { font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace; }
 
-      h1, h2, h3 { font-family: "Zilla Slab", Georgia, serif; color: var(--ink); margin: 0; font-weight: 700; letter-spacing: -0.01em; }
+      h1, h2, h3 {
+        font-family: "Zilla Slab", Georgia, serif; color: var(--ink); margin: 0;
+        font-weight: 700; letter-spacing: -0.01em;
+      }
 
       .wrap { max-width: 1080px; margin: 0 auto; padding: 0 1.6rem; }
 
-      /* kicker: the mono dateline label used above each section */
+      .visually-hidden {
+        position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+        overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+      }
+
+      .skip {
+        position: absolute; left: 50%; top: 0; transform: translate(-50%, -120%);
+        background: var(--ink); color: var(--paper); padding: 0.55rem 1rem;
+        font-family: "IBM Plex Mono", monospace; font-size: 0.75rem; letter-spacing: 0.06em;
+        text-transform: uppercase; z-index: 200; transition: transform 0.18s ease;
+      }
+      .skip:focus-visible { transform: translate(-50%, 0.6rem); }
+
+      /* ---- kicker ---- */
       .kicker {
         font-family: "IBM Plex Mono", monospace; font-size: 0.7rem; font-weight: 600;
         text-transform: uppercase; letter-spacing: 0.18em; color: var(--red);
@@ -75,578 +97,987 @@
 
       /* ---------- masthead ---------- */
       .masthead {
-        position: sticky; top: 0; z-index: 50;
+        position: sticky; top: 0; z-index: 60;
         background: rgba(250, 246, 238, 0.92);
         backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
         border-bottom: 1px solid var(--rule);
       }
-      .masthead .inner { display: flex; align-items: center; justify-content: space-between; padding: 0.7rem 1.6rem; max-width: 1080px; margin: 0 auto; }
+      .masthead .inner {
+        display: flex; align-items: center; justify-content: space-between;
+        padding: 0.7rem 1.6rem; max-width: 1080px; margin: 0 auto;
+      }
       .brand { display: flex; align-items: center; gap: 0.6rem; }
-      .brand img { width: 26px; height: 26px; display: block; }
+      .brand img { width: 26px; height: 26px; }
       .brand .word { font-family: "Zilla Slab", serif; font-weight: 700; font-size: 1.05rem; letter-spacing: 0.06em; }
-      .nav { display: flex; align-items: center; gap: 1.6rem; }
+      .nav { display: flex; align-items: center; gap: 1.5rem; }
       .nav a { font-family: "IBM Plex Mono", monospace; font-size: 0.76rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); transition: color 0.15s; }
       .nav a:hover { color: var(--red); }
       .nav a.gh { color: var(--ink); border: 1px solid var(--ink); padding: 0.4rem 0.7rem; }
       .nav a.gh:hover { background: var(--ink); color: var(--paper); }
+      @media (max-width: 720px) { .nav a.navlink { display: none; } }
 
       /* ---------- buttons ---------- */
       .btn {
         display: inline-flex; align-items: center; gap: 0.45rem; padding: 0.6rem 1.15rem;
         font-family: "IBM Plex Mono", monospace; font-size: 0.78rem; letter-spacing: 0.04em;
-        text-transform: uppercase; border: 1px solid var(--ink); cursor: pointer; transition: all 0.15s ease;
+        text-transform: uppercase; border: 1px solid var(--ink); cursor: pointer;
+        transition: all 0.15s ease; background: transparent; color: var(--ink);
       }
       .btn-ink { background: var(--ink); color: var(--paper); }
       .btn-ink:hover { background: var(--red); border-color: var(--red); }
-      .btn-ghost { background: transparent; color: var(--ink); }
       .btn-ghost:hover { background: var(--ink); color: var(--paper); }
 
-      /* ---------- hero ---------- */
-      #hero { padding: 4.5rem 0 3.25rem; }
+      /* =====================================================================
+         HERO — forge-charged
+         ===================================================================== */
+      #hero { padding: 4.25rem 0 3rem; position: relative; overflow: hidden; }
       .hero-grid { display: grid; grid-template-columns: 1fr; gap: 2.5rem; align-items: center; }
-      @media (min-width: 920px) { .hero-grid { grid-template-columns: 1.55fr 1fr; gap: 2rem; } }
+      @media (min-width: 920px) { .hero-grid { grid-template-columns: 1.5fr 1fr; gap: 2rem; } }
+
       #hero h1 {
-        font-size: clamp(2.6rem, 6.2vw, 4.4rem); line-height: 1.02; letter-spacing: -0.02em;
-        margin: 1.25rem 0 0;
+        font-size: clamp(2.5rem, 6vw, 4.3rem); line-height: 1.02; letter-spacing: -0.02em;
+        margin: 1.1rem 0 0;
       }
+      #hero h1 .charge { color: var(--red); position: relative; }
       .hero-rule { height: 3px; width: 4.5rem; background: var(--red); margin: 1.4rem 0 1.5rem; transform-origin: left; }
-      .lead { font-size: clamp(1.05rem, 1.7vw, 1.22rem); color: var(--ink-2); max-width: 38ch; line-height: 1.55; }
+      .lead { font-size: clamp(1.05rem, 1.7vw, 1.2rem); color: var(--ink-2); max-width: 42ch; line-height: 1.55; }
       .lead em { color: var(--red); font-style: italic; }
       .hero-cta { display: flex; gap: 0.7rem; flex-wrap: wrap; margin-top: 1.9rem; }
+
+      /* anvil / forge stage */
       .hero-mark { display: flex; justify-content: center; align-items: center; }
-      .hero-mark img { width: min(230px, 72%); height: auto; }
       @media (min-width: 920px) { .hero-mark { border-left: 1px solid var(--rule); padding-left: 2.5rem; align-self: stretch; } }
-      @media (max-width: 919px) { .hero-mark { order: -1; justify-content: flex-start; } .hero-mark img { width: 104px; } }
+      @media (max-width: 919px) { .hero-mark { order: -1; justify-content: flex-start; } }
 
-      /* ---------- catalogue ---------- */
-      #tools { padding: 4rem 0 4.5rem; }
-      .sec-head { margin-bottom: 1.5rem; }
-      .sec-head h2 { font-size: clamp(1.7rem, 3.2vw, 2.3rem); margin-top: 0.7rem; }
-      .sec-head .sub { color: var(--muted); margin-top: 0.4rem; font-size: 1rem; max-width: 54ch; }
+      .forge-stage {
+        position: relative; width: min(260px, 78%); aspect-ratio: 1 / 1;
+        display: grid; place-items: center;
+      }
+      @media (max-width: 919px) { .forge-stage { width: 132px; } }
 
-      .tool-row {
-        position: relative;
-        display: grid; grid-template-columns: 150px 1fr; gap: 0.6rem 2.4rem;
-        padding: 1.85rem 0.6rem; border-top: 1px solid var(--rule);
-        transition: background 0.18s ease, box-shadow 0.22s ease;
-        translate: 0 var(--ty, 0); filter: brightness(var(--dim, 1)); will-change: translate, filter;
+      .forge-glow {
+        position: absolute; inset: -8% -8% -2% -8%; border-radius: 50%;
+        background: radial-gradient(circle at 50% 62%, rgba(255,122,47,0.0) 0%, rgba(255,122,47,0.0) 100%);
+        filter: blur(8px); opacity: 0; pointer-events: none; z-index: 0;
+        transition: opacity 0.4s ease;
       }
-      .tool-row:last-of-type { border-bottom: 1px solid var(--rule); }
-      .tool-row::before {
-        content: ""; position: absolute; left: 0; top: -1px; bottom: -1px; width: 0;
-        background: var(--red); transition: width 0.22s cubic-bezier(0.2, 0.7, 0.3, 1);
-      }
-      .tool-row:hover { background: var(--red-tint); box-shadow: 0 8px 26px rgba(28, 28, 28, 0.07); }
-      .tool-row:hover::before { width: 3px; }
-      @keyframes lf-bob { 0%, 100% { translate: 0 0; } 50% { translate: 0 -4px; } }
-      .tool-no {
-        font-family: "Zilla Slab", serif; font-weight: 700; font-size: 2.1rem; color: var(--red); line-height: 1;
-        animation: lf-bob 4.5s ease-in-out infinite;
-        transition: transform 0.25s cubic-bezier(0.2, 0.7, 0.3, 1), color 0.2s ease;
-      }
-      .tool-row:nth-child(3n + 2) .tool-no { animation-delay: -1.5s; }
-      .tool-row:nth-child(3n) .tool-no { animation-delay: -3s; }
-      .tool-row:hover .tool-no { transform: scale(1.05); color: var(--red-deep); animation-play-state: paused; }
-      .tool-main h3 { transition: transform 0.2s ease; }
-      .tool-row:hover .tool-main h3 { transform: translateX(3px); }
-      .tool-aside { margin-top: 0.7rem; }
-      .tool-scope { font-family: "IBM Plex Mono", monospace; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); }
-      .tags { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-top: 0.7rem; }
-      .tag { font-family: "IBM Plex Mono", monospace; font-size: 0.7rem; color: var(--meta); border: 1px solid var(--rule); padding: 0.08rem 0.4rem; }
-      .tool-main h3 { font-size: 1.5rem; display: flex; align-items: baseline; gap: 0.6rem; flex-wrap: wrap; }
-      .tool-repo { font-family: "IBM Plex Mono", monospace; font-size: 0.72rem; font-weight: 500; color: var(--muted); transition: color 0.15s; }
-      .tool-row:hover .tool-repo { color: var(--red); }
-      .tool-usecase { font-size: 1.1rem; color: var(--ink); margin: 0.55rem 0 0; line-height: 1.45; }
-      .tool-desc { color: var(--muted); margin: 0.6rem 0 0; font-size: 0.97rem; line-height: 1.6; }
-      .tool-disc {
-        font-family: "IBM Plex Mono", monospace; font-size: 0.74rem; color: var(--ink-2); line-height: 1.55;
-        margin: 0.95rem 0 0; padding-left: 0.9rem; border-left: 2px solid var(--red);
-      }
-      .ic { font-family: "IBM Plex Mono", monospace; font-size: 0.86em; background: var(--paper-2); border: 1px solid var(--rule); padding: 0.02em 0.32em; }
-      .builtby { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem 0.7rem; margin: 1.15rem 0 0; }
-      .bb-label { font-family: "IBM Plex Mono", monospace; font-size: 0.66rem; text-transform: uppercase; letter-spacing: 0.14em; color: var(--meta); white-space: nowrap; }
-      .bb { display: inline-flex; align-items: center; gap: 0.4rem; font-family: "IBM Plex Mono", monospace; font-size: 0.74rem; color: var(--ink-2); }
-      .bb img { width: 20px; height: 20px; border-radius: 50%; border: 1px solid rgba(28, 28, 28, 0.16); display: block; }
-      .bb:hover { color: var(--red); }
+      .forge-mark { position: relative; z-index: 2; width: 100%; height: auto; }
 
-      /* ---------- people ---------- */
-      #people { padding: 5rem 0; background: var(--paper-3); border-top: 1px solid var(--rule-strong); border-bottom: 1px solid var(--rule-strong); }
-      .people-grid { display: grid; grid-template-columns: 1fr; gap: 1.1rem; margin-top: 1.8rem; }
-      @media (min-width: 680px) { .people-grid { grid-template-columns: 1fr 1fr; } }
-      .person { display: flex; gap: 1.4rem; align-items: stretch; background: var(--paper); border: 1px solid var(--rule); border-left: 4px solid var(--red); padding: 1.6rem 1.7rem; }
-      .person > div { min-width: 0; display: flex; flex-direction: column; }
-      .person .av { width: 82px; height: 82px; flex: 0 0 82px; align-self: flex-start; border-radius: 50%; border: 1px solid rgba(28, 28, 28, 0.18); display: block; }
-      .person .pn { font-family: "Zilla Slab", serif; font-weight: 700; font-size: 1.55rem; line-height: 1.04; }
-      .person .ph { font-family: "IBM Plex Mono", monospace; font-size: 0.78rem; color: var(--muted); transition: color 0.15s; overflow-wrap: anywhere; }
-      .person .ph:hover { color: var(--red); }
-      .person .pbio { font-size: 0.98rem; color: var(--ink-2); margin: 0.5rem 0 0; line-height: 1.5; }
-      .person .pp { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: auto; padding-top: 1rem; }
-      .person .pp a { font-family: "IBM Plex Mono", monospace; font-size: 0.7rem; color: var(--meta); border: 1px solid var(--rule); padding: 0.22rem 0.5rem; line-height: 1.2; transition: color 0.15s, border-color 0.15s; }
-      .person .pp a:hover { color: var(--red); border-color: var(--red); }
-
-      /* ---------- principles ---------- */
-      #principles { background: var(--paper-2); border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); padding: 4rem 0; }
-      .prin-grid { display: grid; grid-template-columns: 1fr; margin-top: 1.1rem; }
-      @media (min-width: 560px) { .prin-grid { grid-template-columns: 1fr 1fr; } }
-      @media (min-width: 980px) {
-        .prin-grid { grid-template-columns: repeat(4, 1fr); border-top: 2px solid var(--ink); border-bottom: 2px solid var(--ink); padding: 1.6rem 0; }
+      /* white-hot strike flash overlaid on the mark */
+      .strike-flash {
+        position: absolute; inset: 0; z-index: 3; pointer-events: none;
+        border-radius: 50%; opacity: 0;
+        background: radial-gradient(circle at 50% 56%, rgba(255,255,255,0.95) 0%, rgba(255,234,200,0.6) 30%, rgba(255,122,47,0) 62%);
+        mix-blend-mode: screen;
       }
-      .prin { padding: 1.4rem 1.4rem 1.5rem 0; border-top: 1px solid var(--rule-strong); }
-      @media (min-width: 980px) {
-        .prin { border-top: 0; padding: 0 1.5rem; }
-        .prin + .prin { border-left: 1px solid var(--rule-strong); }
+
+      /* lightning arc canvas (SVG) */
+      .hero-arc { position: absolute; inset: 0; z-index: 3; pointer-events: none; overflow: visible; }
+      .hero-arc path {
+        fill: none; stroke: var(--red); stroke-width: 2.2; stroke-linecap: round;
+        stroke-linejoin: round; filter: drop-shadow(0 0 4px rgba(185,31,31,0.7));
+        opacity: 0;
       }
-      .prin-no { font-family: "IBM Plex Mono", monospace; font-size: 0.72rem; font-weight: 600; color: var(--red); }
-      .prin-label { font-family: "IBM Plex Mono", monospace; font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; color: var(--ink); margin-top: 0.35rem; }
-      .prin p { color: var(--muted); font-size: 0.92rem; line-height: 1.55; margin: 0.6rem 0 0; }
-      .prin .eg { font-family: "IBM Plex Mono", monospace; font-size: 0.7rem; color: var(--meta); margin-top: 0.85rem; letter-spacing: 0.02em; }
 
-      /* ---------- start / colophon ---------- */
-      #start { padding: 4.25rem 0; text-align: center; }
-      #start h2 { font-size: clamp(1.7rem, 3.2vw, 2.3rem); }
-      #start p { color: var(--muted); max-width: 50ch; margin: 0.7rem auto 1.7rem; }
-      .clone { display: inline-block; font-family: "IBM Plex Mono", monospace; font-size: 0.82rem; color: var(--ink-2); background: var(--paper-2); border: 1px solid var(--rule); padding: 0.7rem 1rem; margin-bottom: 1.7rem; }
-      .clone .p { color: var(--red); }
-      .clone .v { color: var(--meta); }
-      .start-cta { display: flex; gap: 0.7rem; justify-content: center; flex-wrap: wrap; }
+      /* spark particles */
+      .spark {
+        position: absolute; left: 50%; top: 58%; width: 3px; height: 3px;
+        background: var(--ember); border-radius: 50%; z-index: 4; pointer-events: none;
+        opacity: 0; box-shadow: 0 0 5px 1px rgba(255,122,47,0.8);
+      }
 
-      footer { border-top: 2px solid var(--ink); padding: 2rem 0 2.5rem; }
-      footer .inner { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1.2rem; }
-      .foot-brand { display: flex; align-items: center; gap: 0.55rem; }
-      .foot-brand img { width: 22px; height: 22px; }
-      .foot-brand .word { font-family: "Zilla Slab", serif; font-weight: 700; letter-spacing: 0.05em; }
-      .foot-links { display: flex; flex-wrap: wrap; gap: 0.5rem 1rem; }
-      .foot-links a { font-family: "IBM Plex Mono", monospace; font-size: 0.74rem; color: var(--muted); }
+      @keyframes strikeFlash {
+        0% { opacity: 0; }
+        8% { opacity: 1; }
+        100% { opacity: 0; }
+      }
+      @keyframes glowPulse {
+        0% { opacity: 0; }
+        12% { opacity: 1; }
+        70% { opacity: 0.5; }
+        100% { opacity: 0; }
+      }
+      @keyframes arcDraw {
+        0% { opacity: 0; stroke-dashoffset: var(--len); }
+        6% { opacity: 1; }
+        40% { opacity: 1; stroke-dashoffset: 0; }
+        60% { opacity: 0; stroke-dashoffset: 0; }
+        100% { opacity: 0; }
+      }
+
+      .forge-stage.struck .strike-flash { animation: strikeFlash 0.7s ease-out; }
+      .forge-stage.struck .forge-glow {
+        background: radial-gradient(circle at 50% 62%, rgba(255,122,47,0.55) 0%, rgba(185,31,31,0.22) 42%, rgba(255,122,47,0) 72%);
+        animation: glowPulse 0.95s ease-out;
+      }
+      .forge-stage.struck .hero-arc path { animation: arcDraw 0.7s ease-out; }
+
+      /* tiny inline forge caption */
+      .forge-caption {
+        position: absolute; bottom: -1.9rem; left: 0; right: 0; text-align: center;
+        font-family: "IBM Plex Mono", monospace; font-size: 0.62rem; letter-spacing: 0.16em;
+        text-transform: uppercase; color: var(--meta);
+      }
+      @media (max-width: 919px) { .forge-caption { position: static; text-align: left; margin-top: 0.7rem; } }
+
+      .hero-stats {
+        display: flex; gap: 1.5rem; flex-wrap: wrap; margin-top: 2.4rem;
+        border-top: 1px solid var(--rule); padding-top: 1.4rem;
+      }
+      .hero-stats .stat .n { font-family: "Zilla Slab", serif; font-weight: 700; font-size: 1.5rem; color: var(--ink); line-height: 1; }
+      .hero-stats .stat .l { font-family: "IBM Plex Mono", monospace; font-size: 0.64rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--meta); margin-top: 0.3rem; }
+
+      /* =====================================================================
+         CATALOGUE — the forge floor
+         ===================================================================== */
+      #catalogue { padding: 3rem 0 4rem; border-top: 2px solid var(--ink); position: relative; }
+
+      .cat-head { display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.4rem; }
+      .cat-head h2 { font-size: clamp(1.7rem, 3.4vw, 2.5rem); line-height: 1.05; margin-top: 0.7rem; }
+      .cat-head .sub { color: var(--muted); max-width: 46ch; font-size: 1rem; margin-top: 0.5rem; }
+
+      /* sticky filter / search bar */
+      .controls {
+        position: sticky; top: 3.4rem; z-index: 40;
+        background: rgba(250, 246, 238, 0.94);
+        backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+        border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule);
+        padding: 0.85rem 0; margin-bottom: 1.8rem;
+      }
+      .controls-inner { display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; }
+
+      .chips { display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center; }
+      .chip {
+        font-family: "IBM Plex Mono", monospace; font-size: 0.72rem; letter-spacing: 0.06em;
+        text-transform: uppercase; color: var(--ink-2);
+        border: 1px solid var(--rule-strong); background: transparent;
+        padding: 0.42rem 0.78rem; cursor: pointer; transition: all 0.15s ease;
+        display: inline-flex; align-items: center; gap: 0.4rem; line-height: 1;
+      }
+      .chip .cnt { color: var(--meta); font-size: 0.64rem; }
+      .chip:hover { border-color: var(--ink); }
+      .chip[aria-pressed="true"] {
+        background: var(--ink); color: var(--paper); border-color: var(--ink);
+      }
+      .chip[aria-pressed="true"] .cnt { color: rgba(250,246,238,0.65); }
+      .chip.is-red[aria-pressed="true"] { background: var(--red); border-color: var(--red); }
+
+      .search {
+        position: relative; margin-left: auto; flex: 1 1 200px; max-width: 280px; min-width: 170px;
+      }
+      .search input {
+        width: 100%; font-family: "IBM Plex Mono", monospace; font-size: 0.78rem;
+        color: var(--ink); background: var(--paper); border: 1px solid var(--rule-strong);
+        padding: 0.5rem 1.9rem 0.5rem 0.7rem; letter-spacing: 0.02em;
+      }
+      .search input::placeholder { color: var(--meta); text-transform: uppercase; letter-spacing: 0.1em; font-size: 0.68rem; }
+      .search input::-webkit-search-cancel-button,
+      .search input::-webkit-search-decoration { -webkit-appearance: none; appearance: none; }
+      .search input:focus-visible { border-color: var(--red); outline: none; box-shadow: 0 0 0 2px rgba(185,31,31,0.18); }
+      .search .clr {
+        position: absolute; right: 0.4rem; top: 50%; transform: translateY(-50%);
+        border: 0; background: transparent; cursor: pointer; color: var(--meta);
+        font-family: "IBM Plex Mono", monospace; font-size: 0.9rem; line-height: 1; padding: 0.2rem;
+        display: none;
+      }
+      .search.has-val .clr { display: block; }
+      .search .clr:hover { color: var(--red); }
+
+      .resultline {
+        font-family: "IBM Plex Mono", monospace; font-size: 0.68rem; letter-spacing: 0.1em;
+        text-transform: uppercase; color: var(--meta); margin-bottom: 1.1rem; min-height: 1em;
+      }
+      .resultline b { color: var(--ink); font-weight: 600; }
+
+      /* the grid */
+      .grid {
+        display: grid; gap: 1rem;
+        grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr));
+      }
+
+      /* ---------- card ---------- */
+      .card {
+        position: relative; display: flex; flex-direction: column;
+        border: 1px solid var(--rule); border-left: 3px solid var(--rule-strong);
+        background: var(--paper); padding: 1.1rem 1.15rem 1.15rem; overflow: hidden;
+        transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+        cursor: pointer; text-align: left; width: 100%; font: inherit; color: inherit;
+      }
+      .card:hover, .card.is-open, .card:focus-within {
+        border-left-color: var(--red); transform: translateY(-2px);
+        box-shadow: 0 6px 22px -14px rgba(28,28,28,0.45);
+      }
+      .card:focus-visible { outline: 2px solid var(--red); outline-offset: 2px; }
+
+      /* ember glow that rises from the bottom of the card on heat */
+      .card .ember {
+        position: absolute; left: 0; right: 0; bottom: 0; height: 0%;
+        background: linear-gradient(to top, var(--red-tint), rgba(255,122,47,0.03) 60%, transparent);
+        pointer-events: none; transition: height 0.45s ease; z-index: 0;
+      }
+      .card:hover .ember, .card.is-open .ember { height: 60%; }
+
+      /* lightning trace drawn along the border on heat */
+      .card .trace {
+        position: absolute; inset: 0; pointer-events: none; z-index: 1; overflow: visible;
+      }
+      .card .trace rect {
+        fill: none; stroke: var(--red); stroke-width: 1.5;
+        opacity: 0; stroke-dasharray: var(--perim); stroke-dashoffset: var(--perim);
+        filter: drop-shadow(0 0 3px rgba(185,31,31,0.55));
+      }
+      .card:hover .trace rect, .card.is-open .trace rect {
+        animation: traceDraw 0.85s ease-out forwards;
+      }
+      @keyframes traceDraw {
+        0% { opacity: 0; stroke-dashoffset: var(--perim); }
+        12% { opacity: 0.95; }
+        85% { opacity: 0.95; }
+        100% { opacity: 0; stroke-dashoffset: 0; }
+      }
+
+      .card > * { position: relative; z-index: 2; }
+
+      .card-top { display: flex; align-items: flex-start; gap: 0.7rem; }
+      .glyph {
+        flex: 0 0 auto; width: 38px; height: 38px; border: 1px solid var(--rule-strong);
+        display: grid; place-items: center; color: var(--ink); background: var(--paper-2);
+        transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+      }
+      .card:hover .glyph, .card.is-open .glyph { color: var(--red); border-color: var(--red); background: var(--red-tint); }
+      .glyph svg { width: 20px; height: 20px; }
+
+      .card-title-wrap { flex: 1 1 auto; min-width: 0; }
+      .card h3 { font-size: 1.18rem; line-height: 1.15; }
+      .scope {
+        font-family: "IBM Plex Mono", monospace; font-size: 0.62rem; letter-spacing: 0.13em;
+        text-transform: uppercase; color: var(--red); margin-top: 0.3rem;
+        display: block; font-weight: 500;
+      }
+
+      .essence { color: var(--ink-2); font-size: 0.97rem; line-height: 1.5; margin: 0.8rem 0 0; }
+
+      .tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.85rem; }
+      .tag {
+        font-family: "IBM Plex Mono", monospace; font-size: 0.6rem; letter-spacing: 0.1em;
+        text-transform: uppercase; color: var(--meta); border: 1px solid var(--rule);
+        padding: 0.22rem 0.45rem; line-height: 1; background: var(--paper);
+      }
+      .tag.stack { color: var(--ink-2); border-color: var(--rule-strong); }
+
+      /* progressive disclosure */
+      .disclosure {
+        display: grid; grid-template-rows: 0fr;
+        transition: grid-template-rows 0.32s ease;
+        margin-top: 0;
+      }
+      .card:hover .disclosure, .card.is-open .disclosure { grid-template-rows: 1fr; }
+      .disclosure-inner { overflow: hidden; min-height: 0; }
+      .disclosure-pad {
+        border-top: 1px solid var(--rule); margin-top: 0.95rem; padding-top: 0.85rem;
+      }
+      .mech-label, .disc-label {
+        font-family: "IBM Plex Mono", monospace; font-size: 0.58rem; letter-spacing: 0.16em;
+        text-transform: uppercase; color: var(--meta); display: block; margin-bottom: 0.25rem;
+      }
+      .mech { color: var(--ink-2); font-size: 0.92rem; line-height: 1.5; margin: 0; }
+      .disc { color: var(--muted); font-size: 0.85rem; line-height: 1.45; margin: 0.7rem 0 0; font-style: italic; }
+
+      .card-foot {
+        display: flex; align-items: center; justify-content: space-between; gap: 0.6rem;
+        margin-top: 1rem;
+      }
+      .builders { display: flex; align-items: center; }
+      .builders img {
+        width: 24px; height: 24px; border-radius: 50%; border: 1.5px solid var(--paper);
+        margin-left: -7px; object-fit: cover; background: var(--paper-3);
+      }
+      .builders img:first-child { margin-left: 0; }
+      .repo-link {
+        font-family: "IBM Plex Mono", monospace; font-size: 0.66rem; letter-spacing: 0.06em;
+        text-transform: uppercase; color: var(--ink); border-bottom: 1px solid var(--rule-strong);
+        padding-bottom: 1px; transition: color 0.15s, border-color 0.15s;
+      }
+      .repo-link:hover { color: var(--red); border-color: var(--red); }
+
+      .card-affordance {
+        position: absolute; top: 0.85rem; right: 0.95rem; z-index: 3;
+        font-family: "IBM Plex Mono", monospace; font-size: 0.6rem; letter-spacing: 0.1em;
+        text-transform: uppercase; color: var(--meta); display: flex; align-items: center; gap: 0.3rem;
+        transition: color 0.2s ease, opacity 0.2s ease;
+      }
+      .card:hover .card-affordance, .card.is-open .card-affordance { color: var(--red); }
+      .card-affordance .ind { transition: transform 0.25s ease; display: inline-block; }
+      .card.is-open .card-affordance .ind { transform: rotate(180deg); }
+      @media (hover: hover) { .card-affordance .label-tap { display: none; } }
+      @media (hover: none) { .card-affordance .label-hover { display: none; } }
+
+      .empty {
+        border: 1px dashed var(--rule-strong); padding: 2.5rem 1.5rem; text-align: center;
+        color: var(--muted); grid-column: 1 / -1; display: none;
+      }
+      .empty.show { display: block; }
+      .empty .mono { display: block; font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--red); margin-bottom: 0.6rem; }
+      .empty button { margin-top: 1rem; }
+
+      /* reflow animation hook */
+      .card { animation: cardIn 0.4s ease both; }
+      @keyframes cardIn {
+        from { opacity: 0; transform: translateY(8px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+
+      /* =====================================================================
+         PEOPLE
+         ===================================================================== */
+      #people { padding: 3.2rem 0; border-top: 2px solid var(--ink); background: var(--paper-2); }
+      #people h2 { font-size: clamp(1.6rem, 3vw, 2.2rem); margin-top: 0.7rem; }
+      .people-row { display: flex; flex-wrap: wrap; gap: 1.6rem; margin-top: 1.8rem; }
+      .person {
+        display: flex; align-items: center; gap: 0.85rem; border: 1px solid var(--rule);
+        border-left: 3px solid var(--rule-strong); padding: 0.8rem 1.1rem 0.8rem 0.9rem;
+        background: var(--paper); transition: border-color 0.18s ease;
+      }
+      .person:hover { border-left-color: var(--red); }
+      .person img { width: 52px; height: 52px; border-radius: 50%; object-fit: cover; border: 1px solid var(--rule-strong); }
+      .person .h { font-family: "Zilla Slab", serif; font-weight: 700; font-size: 1.02rem; }
+      .person .r { font-family: "IBM Plex Mono", monospace; font-size: 0.64rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--meta); margin-top: 0.15rem; }
+
+      /* =====================================================================
+         PRINCIPLES
+         ===================================================================== */
+      #principles { padding: 3.2rem 0; border-top: 2px solid var(--ink); }
+      .principles-grid { display: grid; gap: 1.4rem 2.2rem; grid-template-columns: 1fr; margin-top: 1.8rem; }
+      @media (min-width: 720px) { .principles-grid { grid-template-columns: repeat(3, 1fr); } }
+      .principle { border-top: 2px solid var(--ink); padding-top: 0.9rem; }
+      .principle .pn { font-family: "IBM Plex Mono", monospace; font-size: 0.66rem; letter-spacing: 0.16em; color: var(--red); text-transform: uppercase; }
+      .principle h3 { font-size: 1.18rem; margin: 0.4rem 0 0.45rem; }
+      .principle p { margin: 0; color: var(--muted); font-size: 0.96rem; }
+
+      /* =====================================================================
+         FOOTER
+         ===================================================================== */
+      footer { border-top: 2px solid var(--ink); padding: 2.6rem 0 3rem; background: var(--paper-2); }
+      .foot-grid { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1.6rem; }
+      .foot-brand { display: flex; align-items: center; gap: 0.6rem; }
+      .foot-brand img { width: 30px; height: 30px; }
+      .foot-brand .word { font-family: "Zilla Slab", serif; font-weight: 700; font-size: 1.1rem; letter-spacing: 0.05em; }
+      .foot-tag { color: var(--muted); font-family: "IBM Plex Mono", monospace; font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; margin-top: 0.6rem; }
+      .foot-links { display: flex; gap: 1.4rem; flex-wrap: wrap; }
+      .foot-links a { font-family: "IBM Plex Mono", monospace; font-size: 0.74rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); transition: color 0.15s; }
       .foot-links a:hover { color: var(--red); }
-      .foot-meta { font-family: "IBM Plex Mono", monospace; font-size: 0.72rem; color: var(--meta); }
-      .foot-meta a { color: var(--ink-2); }
-      .colophon { font-family: "IBM Plex Mono", monospace; font-size: 0.7rem; color: var(--meta); margin: 1.5rem 0 0; padding-top: 1.1rem; border-top: 1px solid var(--rule); letter-spacing: 0.02em; }
+      .foot-fine { margin-top: 2rem; padding-top: 1.2rem; border-top: 1px solid var(--rule); color: var(--meta); font-family: "IBM Plex Mono", monospace; font-size: 0.66rem; letter-spacing: 0.08em; }
 
-      .reveal { opacity: 0; transform: translateY(16px); transition: opacity 0.55s ease, transform 0.55s ease; }
-      .reveal.in { opacity: 1; transform: none; }
-      :focus-visible { outline: 2px solid var(--red); outline-offset: 2px; }
+      .ext::after { content: " ↗"; font-size: 0.85em; opacity: 0.8; }
 
+      /* =====================================================================
+         REDUCED MOTION — disable all non-essential motion
+         ===================================================================== */
       @media (prefers-reduced-motion: reduce) {
         html { scroll-behavior: auto; }
-        .reveal { opacity: 1; transform: none; transition: none; }
-        .hero-rule { transition: none; }
-        .tool-no { animation: none; }
-      }
-      @media (max-width: 639px) {
-        .tool-row { grid-template-columns: 1fr; gap: 0.4rem; padding: 1.6rem 0.2rem; }
-        .tool-no { font-size: 1.5rem; display: inline; }
-        .tool-aside { margin-top: 0.3rem; }
-        .masthead .inner { gap: 0.7rem; }
-        .nav { gap: 1rem; }
-        .brand .word { font-size: 0.95rem; letter-spacing: 0.04em; }
-      }
-      @media (max-width: 460px) {
-        .nav a:not(.gh) { display: none; }
-        .brand .word { font-size: 0.88rem; }
-        .nav a.gh { padding: 0.32rem 0.55rem; }
+        *, *::before, *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; }
+        .card { animation: none; opacity: 1; transform: none; }
+        .card .trace rect { display: none; }
+        .forge-stage.struck .strike-flash,
+        .forge-stage.struck .forge-glow,
+        .forge-stage.struck .hero-arc path,
+        .spark { animation: none !important; opacity: 0 !important; }
+        /* keep disclosure usable: instant, not animated */
+        .disclosure { transition: none; }
       }
     </style>
-    <script>
-      (function () {
-        try {
-          if (!window.matchMedia || !matchMedia("(prefers-reduced-motion: reduce)").matches) {
-            document.documentElement.className += " intro";
-          }
-        } catch (e) {}
-      })();
-    </script>
   </head>
 
   <body>
-    <!-- masthead -->
+    <a class="skip" href="#catalogue">Skip to catalogue</a>
+
+    <!-- ============================ MASTHEAD ============================ -->
     <header class="masthead">
       <div class="inner">
         <a class="brand" href="#top" aria-label="Lambdaforge home">
-          <img src="lambdaforge-mark.png" alt="" width="26" height="26" />
+          <img src="lambdaforge-mark.png" alt="" />
           <span class="word">LAMBDAFORGE</span>
         </a>
-        <nav class="nav" aria-label="Site">
-          <a href="#tools">Tools</a>
-          <a href="#people">People</a>
-          <a href="#principles">Principles</a>
-          <a class="gh" href="https://github.com/lambdaf-org" target="_blank" rel="noreferrer">GitHub ↗</a>
+        <nav class="nav" aria-label="Primary">
+          <a class="navlink" href="#catalogue">Catalogue</a>
+          <a class="navlink" href="#people">People</a>
+          <a class="navlink" href="#principles">Principles</a>
+          <a class="gh ext" href="https://github.com/lambdaf-org" rel="noopener">GitHub</a>
         </nav>
       </div>
     </header>
 
     <main id="top">
-      <!-- hero -->
+      <!-- ============================ HERO ============================ -->
       <section id="hero">
         <div class="wrap">
           <div class="hero-grid">
-            <div class="reveal in">
-              <span class="kicker">A workshop · open source</span>
-              <h1>Tools that show their work.</h1>
-              <div class="hero-rule" id="heroRule"></div>
-              <p class="lead">Software built to be used.</p>
+            <div class="hero-copy">
+              <p class="kicker">Lambdaforge · Open Catalogue</p>
+              <h1>Tools that<br /><span class="charge">show their work.</span></h1>
+              <div class="hero-rule" aria-hidden="true"></div>
+              <p class="lead">
+                We build software to be <em>used</em>, then open the source. Point each
+                one at your problem and watch it answer — and tell you exactly where the
+                answer came from.
+              </p>
               <div class="hero-cta">
-                <a class="btn btn-ink" href="#tools">Browse the tools</a>
-                <a class="btn btn-ghost" href="https://github.com/lambdaf-org" target="_blank" rel="noreferrer">GitHub ↗</a>
+                <a class="btn btn-ink" href="#catalogue">Browse the catalogue</a>
+                <a class="btn btn-ghost ext" href="https://github.com/lambdaf-org" rel="noopener">View source</a>
+              </div>
+              <div class="hero-stats">
+                <div class="stat"><div class="n" id="statTools">11</div><div class="l">Tools forged</div></div>
+                <div class="stat"><div class="n">5</div><div class="l">Stacks</div></div>
+                <div class="stat"><div class="n">100%</div><div class="l">Source-open</div></div>
               </div>
             </div>
-            <div class="hero-mark reveal in">
-              <img src="lambdaforge-mark.png" alt="Lambdaforge, an anvil with a forge-red lambda rising from it" />
+
+            <div class="hero-mark">
+              <div class="forge-stage" id="forgeStage" aria-hidden="true">
+                <div class="forge-glow"></div>
+                <img class="forge-mark" src="lambdaforge-mark.png" alt="" />
+                <div class="strike-flash"></div>
+                <svg class="hero-arc" viewBox="0 0 100 100" preserveAspectRatio="none">
+                  <path id="heroArcPath" d="M50 8 L46 30 L54 38 L44 56 L52 64 L47 88" />
+                </svg>
+                <!-- sparks injected by JS -->
+                <div class="forge-caption mono">Struck on the anvil · forge-charged</div>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- catalogue -->
-      <section id="tools">
+      <!-- ============================ CATALOGUE ============================ -->
+      <section id="catalogue">
         <div class="wrap">
-          <div class="sec-head reveal">
-            <span class="kicker">Catalogue</span>
-            <h2>The tools</h2>
-            <p class="sub">Each one is its own repository under lambdaf-org. Open the source and read how it works.</p>
+          <div class="cat-head">
+            <div>
+              <p class="kicker">The Forge Floor · Catalogue</p>
+              <h2>Every tool on one floor.</h2>
+              <p class="sub">
+                Filter by stack, search by name, then open a card to see the mechanism
+                and the one thing it does not pretend to do.
+              </p>
+            </div>
           </div>
+        </div>
 
-          <!-- 01 Overseer -->
-          <article class="tool-row reveal">
-            <div>
-              <div class="tool-no">01</div>
-              <div class="tool-aside">
-                <div class="tool-scope">PROTOCOL · NO APP CODE</div>
-                <div class="tags"><span class="tag">Claude Code</span><span class="tag">Plain files</span><span class="tag">Knowledge graph</span></div>
+        <!-- sticky controls -->
+        <div class="controls" role="region" aria-label="Filter and search the catalogue">
+          <div class="wrap">
+            <div class="controls-inner">
+              <div class="chips" role="group" aria-label="Filter by stack">
+                <button class="chip is-red" type="button" data-stack="all" aria-pressed="true">All <span class="cnt" data-count="all"></span></button>
+                <button class="chip" type="button" data-stack="Rust" aria-pressed="false">Rust <span class="cnt" data-count="Rust"></span></button>
+                <button class="chip" type="button" data-stack="Python" aria-pressed="false">Python <span class="cnt" data-count="Python"></span></button>
+                <button class="chip" type="button" data-stack="Web" aria-pressed="false">Web <span class="cnt" data-count="Web"></span></button>
+                <button class="chip" type="button" data-stack="Claude Code" aria-pressed="false">Claude Code <span class="cnt" data-count="Claude Code"></span></button>
+                <button class="chip" type="button" data-stack="Java" aria-pressed="false">Java <span class="cnt" data-count="Java"></span></button>
+              </div>
+              <div class="search" id="searchWrap">
+                <label class="visually-hidden" for="searchInput">Search tools</label>
+                <input id="searchInput" type="search" autocomplete="off" spellcheck="false" placeholder="Search tools" />
+                <button class="clr" id="searchClear" type="button" aria-label="Clear search">×</button>
               </div>
             </div>
-            <div class="tool-main">
-              <h3>Overseer <a class="tool-repo" href="https://github.com/lambdaf-org/overseer" target="_blank" rel="noreferrer">/overseer ↗</a></h3>
-              <p class="tool-usecase">Tell it what you know about yourself, the people around you, and your work, then ask &ldquo;what should I focus on this week?&rdquo; and get an answer drawn from one graph of your goals, projects, and network.</p>
-              <p class="tool-desc">Overseer is plain files plus one protocol (OVERSEER.md); Claude Code reads your corpus and folds it into a single graph of nodes and edges in <span class="ic">brain/</span>, with nothing to deploy and no schema to migrate. It never stores status; it records dated events and works out the current state when you ask. The index stays small and re-derivable, so a question costs about what it needs.</p>
-              <p class="tool-disc">It pushes back: when what you say you want drifts from what your record shows, it says so.</p>
-              <div class="builtby"><span class="bb-label">Built by</span><a class="bb" href="https://github.com/191-iota" target="_blank" rel="noreferrer"><img src="people/191-iota.png" alt="" width="20" height="20" />191-iota</a></div>
-            </div>
-          </article>
+          </div>
+        </div>
 
-          <!-- 02 Saul Swissman -->
-          <article class="tool-row reveal">
-            <div>
-              <div class="tool-no">02</div>
-              <div class="tool-aside">
-                <div class="tool-scope">SWISS LAW · NO APP CODE</div>
-                <div class="tags"><span class="tag">Claude Code</span><span class="tag">Swiss federal law</span><span class="tag">RAG</span><span class="tag">Fedlex</span></div>
-              </div>
+        <div class="wrap">
+          <p class="resultline" id="resultLine" aria-live="polite"></p>
+          <div class="grid" id="grid">
+            <div class="empty" id="emptyState">
+              <span class="mono">No match on the floor</span>
+              Nothing here fits that filter and search together.
+              <div><button class="btn btn-ghost" type="button" id="resetBtn">Reset filters</button></div>
             </div>
-            <div class="tool-main">
-              <h3>Saul Swissman <a class="tool-repo" href="https://github.com/lambdaf-org/saul-swissman" target="_blank" rel="noreferrer">/saul-swissman ↗</a></h3>
-              <p class="tool-usecase">Ask a question about Swiss federal law and get an answer where every statement carries the article, the SR number, the verbatim German wording, and the consolidation date.</p>
-              <p class="tool-desc">Saul reads the statutes in <span class="ic">corpus/ch/</span>, routes to the governing articles through a small index in <span class="ic">register/</span>, and quotes them word for word; a statement without an article and a verbatim quote does not get made. There is no application code; SAUL.md defines how it works and Claude Code is the engine. When a provision is not in its corpus, it says so and points to Fedlex.</p>
-              <p class="tool-disc">It quotes only the statute it opened this turn; when the corpus runs out, it names the gap and points to Fedlex.</p>
-              <div class="builtby"><span class="bb-label">Built by</span><a class="bb" href="https://github.com/191-iota" target="_blank" rel="noreferrer"><img src="people/191-iota.png" alt="" width="20" height="20" />191-iota</a></div>
-            </div>
-          </article>
-
-          <!-- 03 auspex -->
-          <article class="tool-row reveal">
-            <div>
-              <div class="tool-no">03</div>
-              <div class="tool-aside">
-                <div class="tool-scope">RUST · LOCAL-ONLY</div>
-                <div class="tags"><span class="tag">Rust</span><span class="tag">Ollama</span><span class="tag">fastembed</span></div>
-              </div>
-            </div>
-            <div class="tool-main">
-              <h3>auspex <a class="tool-repo" href="https://github.com/lambdaf-org/auspex-v1" target="_blank" rel="noreferrer">/auspex-v1 ↗</a></h3>
-              <p class="tool-usecase">Point it at your chat exports and get cited per-person profiles plus a real interaction graph, then re-run to see a ranked feed of what changed in your network.</p>
-              <p class="tool-desc">A single Rust binary parses your message exports, runs them through a local Ollama model and fastembed retrieval, and serves an embedded D3 graph at localhost:8765. Every claim cites the exact message it came from, and every confidence number is computed by formula from how many falsification probes it survived. Self-claims like &ldquo;i&rsquo;m an INTJ&rdquo; get their own reconciliation stream, checked against behaviour.</p>
-              <p class="tool-disc">Fully local: no telemetry, no remote calls, no cloud sync; the HTTP server only listens on 127.0.0.1.</p>
-              <div class="builtby"><span class="bb-label">Built by</span><a class="bb" href="https://github.com/191-iota" target="_blank" rel="noreferrer"><img src="people/191-iota.png" alt="" width="20" height="20" />191-iota</a></div>
-            </div>
-          </article>
-
-          <!-- 04 synthesis -->
-          <article class="tool-row reveal">
-            <div>
-              <div class="tool-no">04</div>
-              <div class="tool-aside">
-                <div class="tool-scope">PYTHON · DOCS &amp; AUDIO</div>
-                <div class="tags"><span class="tag">Python</span><span class="tag">Anthropic API</span><span class="tag">faster-whisper</span></div>
-              </div>
-            </div>
-            <div class="tool-main">
-              <h3>synthesis <a class="tool-repo" href="https://github.com/lambdaf-org/synthesis" target="_blank" rel="noreferrer">/synthesis ↗</a></h3>
-              <p class="tool-usecase">Point it at a folder of documents and get a self-contained interactive HTML briefing, or live-transcribe a lecture or meeting into a structured report.</p>
-              <p class="tool-desc">In document mode the pipeline ingests files (PDF via pdftotext, DOCX via pandoc, GitHub repos via a <span class="ic">github:</span> prefix), runs a two-pass extraction plus an independent confirmation pass, and renders one HTML file: a vertical timeline with a TODAY line, expandable cards, and a game plan. Only items both passes agree on and that carry a grounded source quote make it through. Live mode transcribes microphone or system audio with faster-whisper.</p>
-              <p class="tool-disc">An item ships only if both passes agree on it and it carries a grounded source quote; live audio is processed in memory and never written to disk.</p>
-              <div class="builtby"><span class="bb-label">Built by</span><a class="bb" href="https://github.com/191-iota" target="_blank" rel="noreferrer"><img src="people/191-iota.png" alt="" width="20" height="20" />191-iota</a></div>
-            </div>
-          </article>
-
-          <!-- 05 The Factory -->
-          <article class="tool-row reveal">
-            <div>
-              <div class="tool-no">05</div>
-              <div class="tool-aside">
-                <div class="tool-scope">AGENT SCAFFOLD · ANY DOMAIN</div>
-                <div class="tags"><span class="tag">Claude Code</span><span class="tag">Agent</span><span class="tag">Markdown</span></div>
-              </div>
-            </div>
-            <div class="tool-main">
-              <h3>The Factory <a class="tool-repo" href="https://github.com/lambdaf-org/the-factory" target="_blank" rel="noreferrer">/the-factory ↗</a></h3>
-              <p class="tool-usecase">Drop source material into context/, write task.md, and run Claude Code as an autonomous worker that does the job end to end.</p>
-              <p class="tool-desc">The agent reads your context folder and task, plans, writes output to a new folder under <span class="ic">deliverable/</span>, and reviews it end to end. Before and during the work it keeps its own notes in <span class="ic">notes/</span>: what is where, how it connects, what state it is in. The next run reads the notes first and resumes warm. Run it interactively or headless with <span class="ic">--auto</span>.</p>
-              <p class="tool-disc">Output only ever lands in a new deliverable/ folder; your context/ is left untouched.</p>
-              <div class="builtby"><span class="bb-label">Built by</span><a class="bb" href="https://github.com/191-iota" target="_blank" rel="noreferrer"><img src="people/191-iota.png" alt="" width="20" height="20" />191-iota</a></div>
-            </div>
-          </article>
-
-          <!-- 06 Neuro -->
-          <article class="tool-row reveal">
-            <div>
-              <div class="tool-no">06</div>
-              <div class="tool-aside">
-                <div class="tool-scope">RUST + VUE · REAL-TIME</div>
-                <div class="tags"><span class="tag">Rust</span><span class="tag">Vue 3</span><span class="tag">WebSocket</span><span class="tag">PostgreSQL</span></div>
-              </div>
-            </div>
-            <div class="tool-main">
-              <h3>Neuro <a class="tool-repo" href="https://github.com/lambdaf-org/neuro" target="_blank" rel="noreferrer">/neuro ↗</a></h3>
-              <p class="tool-usecase">Run five short, gamified cognitive tests (reaction time, working memory, processing speed, and more) and get a five-part score profile with per-game leaderboards.</p>
-              <p class="tool-desc">Neuro administers tasks modelled on established psychometric paradigms over a real-time WebSocket pipeline (Rust/Actix-Web backend, Vue 3 frontend) and records fine-grained metrics to PostgreSQL. Each game targets one narrow ability from the Cattell-Horn-Carroll model, so you get five separate ability scores. Per-game leaderboards let you compare against other users.</p>
-              <p class="tool-disc">Five separate ability scores, with anticipatory and lapse trials dropped so each one stays meaningful.</p>
-              <div class="builtby"><span class="bb-label">Built by</span><a class="bb" href="https://github.com/191-iota" target="_blank" rel="noreferrer"><img src="people/191-iota.png" alt="" width="20" height="20" />191-iota</a><a class="bb" href="https://github.com/Ajith1412" target="_blank" rel="noreferrer"><img src="people/Ajith1412.png" alt="" width="20" height="20" />Ajith1412</a></div>
-            </div>
-          </article>
-
-          <!-- 07 ClockBot -->
-          <article class="tool-row reveal">
-            <div>
-              <div class="tool-no">07</div>
-              <div class="tool-aside">
-                <div class="tool-scope">RUST · DISCORD BOT</div>
-                <div class="tags"><span class="tag">Rust</span><span class="tag">Discord</span><span class="tag">SQLite</span><span class="tag">plotters</span></div>
-              </div>
-            </div>
-            <div class="tool-main">
-              <h3>ClockBot <a class="tool-repo" href="https://github.com/lambdaf-org/clock" target="_blank" rel="noreferrer">/clock ↗</a></h3>
-              <p class="tool-usecase">Clock in and out of work activities from Discord slash commands and get weekly hours, rankings, and charts back.</p>
-              <p class="tool-desc">ClockBot tracks time per activity in a Discord server. <span class="ic">/clock in</span> starts a session, <span class="ic">/clock out</span> stops it and reports the duration, and who, leaderboard, and stats read back current sessions, rankings, and breakdowns. <span class="ic">/clock chart</span> renders a PNG line chart of the top users&rsquo; weekly hours over 1 to 52 weeks. Sessions live in a SQLite file, and weekly stats archive every Monday at 00:00 Europe/Zurich.</p>
-              <p class="tool-disc">Charts render with plotters on the pure-Rust ab_glyph backend and an embedded font, so the runtime container needs no system font packages.</p>
-              <div class="builtby"><span class="bb-label">Built by</span><a class="bb" href="https://github.com/191-iota" target="_blank" rel="noreferrer"><img src="people/191-iota.png" alt="" width="20" height="20" />191-iota</a><a class="bb" href="https://github.com/Thirstums" target="_blank" rel="noreferrer"><img src="people/Thirstums.png" alt="" width="20" height="20" />Thirstums</a><a class="bb" href="https://github.com/Ajith1412" target="_blank" rel="noreferrer"><img src="people/Ajith1412.png" alt="" width="20" height="20" />Ajith1412</a></div>
-            </div>
-          </article>
-
-          <!-- 08 transl -->
-          <article class="tool-row reveal">
-            <div>
-              <div class="tool-no">08</div>
-              <div class="tool-aside">
-                <div class="tool-scope">RUST · CLI</div>
-                <div class="tags"><span class="tag">Rust</span><span class="tag">CLI</span><span class="tag">i18n</span><span class="tag">JSON</span></div>
-              </div>
-            </div>
-            <div class="tool-main">
-              <h3>transl <a class="tool-repo" href="https://github.com/lambdaf-org/transl_cli" target="_blank" rel="noreferrer">/transl_cli ↗</a></h3>
-              <p class="tool-usecase">Add a key and value to your base-language JSON file and have transl carry that key across every other language file, so your translation files stay in sync.</p>
-              <p class="tool-desc">A small Rust CLI for projects that keep one JSON file per language. Run <span class="ic">transl &lt;header&gt; &lt;key&gt; &lt;value&gt; &lt;base_lang&gt;</span> to add a property to the base language, and it syncs the new key into the others. Installs with <span class="ic">cargo install --path .</span>; prebuilt Windows binaries are on Releases.</p>
-              <p class="tool-disc">A single MIT-licensed binary that touches only your language JSON files.</p>
-              <div class="builtby"><span class="bb-label">Built by</span><a class="bb" href="https://github.com/191-iota" target="_blank" rel="noreferrer"><img src="people/191-iota.png" alt="" width="20" height="20" />191-iota</a></div>
-            </div>
-          </article>
-
-          <!-- 09 MoneyForge -->
-          <article class="tool-row reveal">
-            <div>
-              <div class="tool-no">09</div>
-              <div class="tool-aside">
-                <div class="tool-scope">NEXT.JS · LOCAL-ONLY</div>
-                <div class="tags"><span class="tag">Next.js 16</span><span class="tag">React 19</span><span class="tag">Tailwind 4</span></div>
-              </div>
-            </div>
-            <div class="tool-main">
-              <h3>MoneyForge <a class="tool-repo" href="https://github.com/lambdaf-org/MoneyForge" target="_blank" rel="noreferrer">/MoneyForge ↗</a></h3>
-              <p class="tool-usecase">Track savings goals by name, target, current amount, and monthly contribution, and see how many months each one needs to hit its target.</p>
-              <p class="tool-desc">Each counter holds a name, a target, a current balance, and a monthly contribution. It shows percent progress and the amount left, and computes an ETA by dividing what remains by the monthly contribution and rounding up. Quick buttons add 100, 500, or 1000 or subtract 100; a summary row totals saved against target across all goals.</p>
-              <p class="tool-disc">No backend and no accounts: counters live in your browser&rsquo;s localStorage and never leave the device.</p>
-              <div class="builtby"><span class="bb-label">Built by</span><a class="bb" href="https://github.com/Thirstums" target="_blank" rel="noreferrer"><img src="people/Thirstums.png" alt="" width="20" height="20" />Thirstums</a></div>
-            </div>
-          </article>
+          </div>
         </div>
       </section>
 
-      <!-- people -->
+      <!-- ============================ PEOPLE ============================ -->
       <section id="people">
         <div class="wrap">
-          <div class="sec-head reveal">
-            <span class="kicker">Contributors</span>
-            <h2>The people</h2>
-            <p class="sub">Everyone who has pushed commits to the tools above, and what they worked on. Drawn from each repository's history.</p>
-          </div>
-          <div class="people-grid">
-            <div class="person reveal">
-              <img class="av" src="people/191-iota.png" alt="" width="82" height="82" />
+          <p class="kicker">Who forges them</p>
+          <h2>Three people, eleven tools.</h2>
+          <div class="people-row">
+            <div class="person">
+              <img src="people/191-iota.png" alt="191-iota" />
               <div>
-                <div class="pn">iota</div>
-                <a class="ph" href="https://github.com/191-iota" target="_blank" rel="noreferrer">@191-iota ↗</a>
-                <p class="pbio">Producing software people actually need.</p>
-                <div class="pp">
-                  <a href="https://github.com/lambdaf-org/overseer" target="_blank" rel="noreferrer">overseer</a>
-                  <a href="https://github.com/lambdaf-org/saul-swissman" target="_blank" rel="noreferrer">saul-swissman</a>
-                  <a href="https://github.com/lambdaf-org/auspex-v1" target="_blank" rel="noreferrer">auspex</a>
-                  <a href="https://github.com/lambdaf-org/synthesis" target="_blank" rel="noreferrer">synthesis</a>
-                  <a href="https://github.com/lambdaf-org/the-factory" target="_blank" rel="noreferrer">the-factory</a>
-                  <a href="https://github.com/lambdaf-org/neuro" target="_blank" rel="noreferrer">neuro</a>
-                  <a href="https://github.com/lambdaf-org/clock" target="_blank" rel="noreferrer">clock</a>
-                  <a href="https://github.com/lambdaf-org/transl_cli" target="_blank" rel="noreferrer">transl</a>
-                </div>
+                <div class="h">191-iota</div>
+                <div class="r">Lead · 10 tools</div>
               </div>
             </div>
-            <div class="person reveal">
-              <img class="av" src="people/Ajith1412.png" alt="" width="82" height="82" />
+            <div class="person">
+              <img src="people/Ajith1412.png" alt="Ajith1412" />
               <div>
-                <div class="pn">Ajith Ramesh</div>
-                <a class="ph" href="https://github.com/Ajith1412" target="_blank" rel="noreferrer">@Ajith1412 ↗</a>
-                <div class="pp">
-                  <a href="https://github.com/lambdaf-org/neuro" target="_blank" rel="noreferrer">neuro</a>
-                  <a href="https://github.com/lambdaf-org/clock" target="_blank" rel="noreferrer">clock</a>
-                </div>
+                <div class="h">Ajith1412</div>
+                <div class="r">Real-time · 3 tools</div>
               </div>
             </div>
-            <div class="person reveal">
-              <img class="av" src="people/Thirstums.png" alt="" width="82" height="82" />
+            <div class="person">
+              <img src="people/Thirstums.png" alt="Thirstums" />
               <div>
-                <div class="pn">Thirsty</div>
-                <a class="ph" href="https://github.com/Thirstums" target="_blank" rel="noreferrer">@Thirstums ↗</a>
-                <div class="pp">
-                  <a href="https://github.com/lambdaf-org/clock" target="_blank" rel="noreferrer">clock</a>
-                  <a href="https://github.com/lambdaf-org/MoneyForge" target="_blank" rel="noreferrer">MoneyForge</a>
-                </div>
+                <div class="h">Thirstums</div>
+                <div class="r">Product · 2 tools</div>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- principles -->
+      <!-- ============================ PRINCIPLES ============================ -->
       <section id="principles">
         <div class="wrap">
-          <div class="sec-head reveal">
-            <span class="kicker">The bench rules</span>
-            <h2>How they&rsquo;re built</h2>
-            <p class="sub">Not every tool does every one of these. Where a tool makes a claim or touches your data, these hold.</p>
-          </div>
-          <div class="prin-grid">
-            <div class="prin reveal">
-              <div class="prin-no">01</div>
-              <div class="prin-label">Receipts</div>
-              <p>A claim about a person, a relationship, or the law carries a quote and a pointer back to the source, or it does not get written down.</p>
-              <p class="eg">overseer · saul-swissman · auspex</p>
+          <p class="kicker">What stays true</p>
+          <h2>Three principles, no exceptions.</h2>
+          <div class="principles-grid">
+            <div class="principle">
+              <div class="pn">01 — Used first</div>
+              <h3>Built to be used.</h3>
+              <p>Each tool earns its place by solving a real task before the source is opened. Nothing ships as a demo.</p>
             </div>
-            <div class="prin reveal">
-              <div class="prin-no">02</div>
-              <div class="prin-label">Computed confidence</div>
-              <p>Confidence is computed from counted evidence and shown with its tally. auspex derives it by formula from falsification probes; Overseer shows the dated tally for you to judge.</p>
-              <p class="eg">auspex · overseer</p>
+            <div class="principle">
+              <div class="pn">02 — Shows its work</div>
+              <h3>Answers carry receipts.</h3>
+              <p>If a tool tells you something, it tells you where that came from — the article, the file, the run.</p>
             </div>
-            <div class="prin reveal">
-              <div class="prin-no">03</div>
-              <div class="prin-label">Explicit about what leaves</div>
-              <p>Your files stay on disk. auspex sends nothing off your machine; the tools that do reach a model strip secrets first and say what goes out.</p>
-              <p class="eg">auspex · synthesis · overseer</p>
+            <div class="principle">
+              <div class="pn">03 — Open by default</div>
+              <h3>Source is the spec.</h3>
+              <p>Every tool is public on GitHub. Read it, run it, fork it. The code is the documentation of record.</p>
             </div>
-            <div class="prin reveal">
-              <div class="prin-no">04</div>
-              <div class="prin-label">No ceremony</div>
-              <p>Several tools are one Markdown protocol with the model as the engine. Nothing to deploy, no schema, no service to babysit.</p>
-              <p class="eg">overseer · saul-swissman</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- start -->
-      <section id="start">
-        <div class="wrap reveal">
-          <span class="kicker" style="justify-content:center">Get started</span>
-          <h2 style="margin-top:0.7rem">Open source, on GitHub</h2>
-          <p>Each tool is its own repository. Clone it, read the protocol or the source, and run it.</p>
-          <div class="clone"><span class="p">git clone</span> https://github.com/lambdaf-org/<span class="v">&lt;tool&gt;</span></div>
-          <div class="start-cta">
-            <a class="btn btn-ink" href="https://github.com/lambdaf-org" target="_blank" rel="noreferrer">All repositories ↗</a>
-            <a class="btn btn-ghost" href="#tools">Back to the catalogue</a>
           </div>
         </div>
       </section>
     </main>
 
+    <!-- ============================ FOOTER ============================ -->
     <footer>
-      <div class="wrap inner">
-        <div class="foot-brand">
-          <img src="lambdaforge-mark.png" alt="" width="22" height="22" />
-          <span class="word">LAMBDAFORGE</span>
-        </div>
-        <nav class="foot-links" aria-label="Repositories">
-          <a href="https://github.com/lambdaf-org/overseer" target="_blank" rel="noreferrer">overseer</a>
-          <a href="https://github.com/lambdaf-org/saul-swissman" target="_blank" rel="noreferrer">saul-swissman</a>
-          <a href="https://github.com/lambdaf-org/auspex-v1" target="_blank" rel="noreferrer">auspex</a>
-          <a href="https://github.com/lambdaf-org/synthesis" target="_blank" rel="noreferrer">synthesis</a>
-          <a href="https://github.com/lambdaf-org/the-factory" target="_blank" rel="noreferrer">the-factory</a>
-          <a href="https://github.com/lambdaf-org/clock" target="_blank" rel="noreferrer">clock</a>
-          <a href="https://github.com/lambdaf-org/MoneyForge" target="_blank" rel="noreferrer">MoneyForge</a>
-        </nav>
-        <p class="foot-meta">
-          <a href="https://github.com/lambdaf-org" target="_blank" rel="noreferrer">github.com/lambdaf-org</a>
-          · <span id="year">2026</span>
-        </p>
-      </div>
       <div class="wrap">
-        <p class="colophon">Set in Zilla Slab, Spectral &amp; IBM Plex Mono. Open source under lambdaf-org.</p>
+        <div class="foot-grid">
+          <div>
+            <div class="foot-brand">
+              <img src="lambdaforge-mark.png" alt="" />
+              <span class="word">LAMBDAFORGE</span>
+            </div>
+            <div class="foot-tag">Tools that show their work</div>
+          </div>
+          <nav class="foot-links" aria-label="Footer">
+            <a href="#catalogue">Catalogue</a>
+            <a href="#people">People</a>
+            <a href="#principles">Principles</a>
+            <a class="ext" href="https://github.com/lambdaf-org" rel="noopener">GitHub</a>
+          </nav>
+        </div>
+        <div class="foot-fine">© 2026 Lambdaforge · Built to be used, then opened.</div>
       </div>
     </footer>
 
     <script>
       (function () {
-        var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-        try { document.getElementById("year").textContent = new Date().getFullYear(); } catch (e) {}
+        "use strict";
 
-        // page-load transition: fade the page in
-        requestAnimationFrame(function () {
-          requestAnimationFrame(function () { document.documentElement.classList.add("ready"); });
+        var REDUCED = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        var HAS_HOVER = window.matchMedia("(hover: hover)").matches;
+
+        /* ----------------------------- DATA ----------------------------- */
+        var TOOLS = [
+          {
+            name: "Overseer", repo: "overseer", stack: "Claude Code",
+            scope: "PROTOCOL · NO APP CODE", glyph: "brain",
+            essence: "A second brain you reason with — tell it your goals, people, and work, then ask what to focus on this week.",
+            mech: "A protocol, not an app: structured notes plus prompts that turn your context into weekly focus.",
+            disc: "Does not run on its own — it is reasoning you drive, not a scheduler.",
+            tags: ["Planning", "Second brain"], people: ["191-iota"]
+          },
+          {
+            name: "Saul Swissman", repo: "saul-swissman", stack: "Claude Code",
+            scope: "SWISS LAW · NO APP CODE", glyph: "scale",
+            essence: "Ask about Swiss federal law and get an answer where every statement carries the article, SR number, and verbatim wording.",
+            mech: "Retrieves the statute, then answers only in terms of cited articles and quoted text.",
+            disc: "Not legal advice and not exhaustive — it is a faster path to the right article.",
+            tags: ["Law", "Citations"], people: ["191-iota"]
+          },
+          {
+            name: "auspex", repo: "auspex-v1", stack: "Rust",
+            scope: "RUST · LOCAL-ONLY", glyph: "graph",
+            essence: "Point it at your chat exports and get cited per-person profiles plus a real interaction graph.",
+            mech: "Parses exports locally, attributes every claim to messages, and builds a who-talks-to-whom graph.",
+            disc: "Runs entirely on your machine — nothing leaves the box.",
+            tags: ["Analysis", "Local-only"], people: ["191-iota"]
+          },
+          {
+            name: "synthesis", repo: "synthesis", stack: "Python",
+            scope: "PYTHON · DOCS & AUDIO", glyph: "doc",
+            essence: "Point it at a folder of documents and get a self-contained interactive briefing, or live-transcribe a meeting.",
+            mech: "Ingests a document folder into one portable HTML briefing; can also transcribe audio in real time.",
+            disc: "Output is a single file you can open anywhere — no server required.",
+            tags: ["Documents", "Audio"], people: ["191-iota"]
+          },
+          {
+            name: "The Factory", repo: "the-factory", stack: "Claude Code",
+            scope: "AGENT SCAFFOLD · ANY DOMAIN", glyph: "factory",
+            essence: "Drop source into context/, write task.md, and run Claude Code as an autonomous worker that does the job end to end.",
+            mech: "A scaffold that wires context, a task spec, and an agent loop into one repeatable worker.",
+            disc: "Domain-agnostic — it gives the structure, you supply the task.",
+            tags: ["Agents", "Scaffold"], people: ["191-iota"]
+          },
+          {
+            name: "Neuro", repo: "neuro", stack: "Rust",
+            scope: "RUST + VUE · REAL-TIME", glyph: "bolt",
+            essence: "Run five short cognitive tests and get a five-part score profile with per-game leaderboards.",
+            mech: "Five timed mini-tests feed a five-axis profile, with a leaderboard per game.",
+            disc: "A self-test, not a clinical assessment.",
+            tags: ["Cognitive", "Real-time"], people: ["191-iota", "Ajith1412"]
+          },
+          {
+            name: "ClockBot", repo: "clock", stack: "Rust",
+            scope: "RUST · DISCORD BOT", glyph: "clock",
+            essence: "Clock in and out of work from Discord and get weekly hours, rankings, and PNG charts.",
+            mech: "Tracks clock events per user and renders weekly hours, rankings, and chart images in-channel.",
+            disc: "Lives where the work talk already happens — no separate app.",
+            tags: ["Discord", "Time-tracking"], people: ["191-iota", "Thirstums", "Ajith1412"]
+          },
+          {
+            name: "transl", repo: "transl_cli", stack: "Rust",
+            scope: "RUST · CLI", glyph: "terminal",
+            essence: "Add a key to your base-language JSON and have it carried across every other language file.",
+            mech: "Diffs your base locale against the rest and fills the missing keys in place.",
+            disc: "Keeps your translation files in sync — it does not invent copy.",
+            tags: ["i18n", "CLI"], people: ["191-iota"]
+          },
+          {
+            name: "MoneyForge", repo: "MoneyForge", stack: "Web",
+            scope: "NEXT.JS · LOCAL-ONLY", glyph: "coins",
+            essence: "Track savings goals and see how many months each needs to hit its target.",
+            mech: "Models each goal against your contributions to project a months-to-target figure.",
+            disc: "Your numbers stay in the browser — local-only by design.",
+            tags: ["Finance", "Local-only"], people: ["Thirstums"]
+          },
+          {
+            name: "GradeForge", repo: "GradeForge", stack: "Web",
+            scope: "NEXT.JS · LOCAL-ONLY", glyph: "grade",
+            essence: "A grade calculator that prints the exact formula and rounding behind every average, for any country's grading system.",
+            mech: "Computes averages per a country's rules and shows the formula and rounding it used.",
+            disc: "Transparent maths — every figure can be traced to its formula.",
+            tags: ["Education", "Local-only"], people: ["191-iota"]
+          },
+          {
+            name: "AlgoLeague", repo: "algoleague_frontend", stack: "Java",
+            scope: "JAVA · REAL-TIME DUELS", glyph: "swords",
+            essence: "Real-time Java coding duels where you're ranked by how your solution actually runs, not just whether it passes.",
+            mech: "Runs both submissions, then ranks on real runtime behaviour, not just pass/fail.",
+            disc: "Performance is the score — correctness is the floor, not the finish.",
+            tags: ["Competitive", "Real-time"], people: ["191-iota", "Ajith1412"]
+          }
+        ];
+
+        var REPO_BASE = "https://github.com/lambdaf-org/";
+
+        /* --------------------------- GLYPHS ----------------------------- */
+        /* Each glyph hints at what the tool does. Simple 24-grid line icons. */
+        var GLYPHS = {
+          brain: '<path d="M9 4a3 3 0 0 0-3 3 3 3 0 0 0-2 5 3 3 0 0 0 2 5 3 3 0 0 0 5 1V5a3 3 0 0 0-2-1Zm6 0a3 3 0 0 1 3 3 3 3 0 0 1 2 5 3 3 0 0 1-2 5 3 3 0 0 1-5 1V5a3 3 0 0 1 2-1Z"/>',
+          scale: '<path d="M12 3v17M6 20h12M5 7h14M5 7l-2.5 6h5L5 7Zm14 0-2.5 6h5L19 7ZM12 3 5 7m7-4 7 4"/>',
+          graph: '<circle cx="6" cy="6" r="2.4"/><circle cx="18" cy="8" r="2.4"/><circle cx="9" cy="18" r="2.4"/><path d="M8 7l8 1M8 8l1 8m8-6-7 8"/>',
+          doc: '<path d="M7 3h7l5 5v13H7V3Zm7 0v5h5M9.5 13h7M9.5 16.5h7M9.5 9.5h3"/>',
+          factory: '<path d="M4 21V10l6 4V10l6 4V8l4-3v16H4Zm3-7h2m4 0h2m4 0h-2"/>',
+          bolt: '<path d="M13 2 4 14h6l-1 8 9-12h-6l1-8Z"/>',
+          clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2.5"/>',
+          terminal: '<rect x="3" y="4" width="18" height="16"/><path d="M7 9l3 3-3 3m6 0h4"/>',
+          coins: '<ellipse cx="9" cy="7" rx="5.5" ry="2.6"/><path d="M3.5 7v5c0 1.4 2.5 2.6 5.5 2.6s5.5-1.2 5.5-2.6V7"/><ellipse cx="15" cy="15" rx="5.5" ry="2.6"/><path d="M9.5 15v3c0 1.4 2.5 2.6 5.5 2.6s5.5-1.2 5.5-2.6v-5"/>',
+          grade: '<path d="M12 3 3 8l9 5 7-3.9V16M6 11v5c0 1.7 2.7 3 6 3s6-1.3 6-3v-5"/>',
+          swords: '<path d="M14.5 3H20v5.5L9 19.5 5 20l.5-4L16.5 5M3 17l4 4m11-4 1 4-4-1m-2-9.5L20.5 3"/>'
+        };
+
+        function glyphSvg(name) {
+          var inner = GLYPHS[name] || GLYPHS.bolt;
+          return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + inner + '</svg>';
+        }
+
+        /* --------------------------- BUILD CARDS ------------------------- */
+        var grid = document.getElementById("grid");
+        var emptyState = document.getElementById("emptyState");
+        var cardEls = [];
+
+        function buildCard(tool) {
+          var card = document.createElement("button");
+          card.className = "card";
+          card.type = "button";
+          card.setAttribute("data-stack", tool.stack);
+          card.setAttribute("data-name", tool.name.toLowerCase());
+          var haystack = (tool.name + " " + tool.essence + " " + tool.mech + " " + tool.tags.join(" ") + " " + tool.stack + " " + tool.scope).toLowerCase();
+          card.setAttribute("data-search", haystack);
+          card.setAttribute("aria-expanded", "false");
+          card.setAttribute("aria-label", tool.name + " — " + tool.essence + " Activate to show how it works.");
+
+          var tagsHtml = '<span class="tag stack">' + tool.stack + '</span>' +
+            tool.tags.map(function (t) { return '<span class="tag">' + t + '</span>'; }).join("");
+
+          var peopleHtml = tool.people.map(function (p) {
+            return '<img src="people/' + p + '.png" alt="" title="' + p + '" loading="lazy" />';
+          }).join("");
+
+          card.innerHTML =
+            '<span class="ember" aria-hidden="true"></span>' +
+            '<svg class="trace" aria-hidden="true" preserveAspectRatio="none"><rect x="0.75" y="0.75" rx="0" ry="0"></rect></svg>' +
+            '<span class="card-affordance" aria-hidden="true"><span class="label-hover">Heat</span><span class="label-tap">Tap</span><span class="ind">▾</span></span>' +
+            '<div class="card-top">' +
+              '<span class="glyph" aria-hidden="true">' + glyphSvg(tool.glyph) + '</span>' +
+              '<div class="card-title-wrap">' +
+                '<h3>' + tool.name + '</h3>' +
+                '<span class="scope">' + tool.scope + '</span>' +
+              '</div>' +
+            '</div>' +
+            '<p class="essence">' + tool.essence + '</p>' +
+            '<div class="tags">' + tagsHtml + '</div>' +
+            '<div class="disclosure"><div class="disclosure-inner"><div class="disclosure-pad">' +
+              '<span class="mech-label">How it works</span>' +
+              '<p class="mech">' + tool.mech + '</p>' +
+              '<span class="disc-label" style="margin-top:0.7rem">Honest limit</span>' +
+              '<p class="disc">' + tool.disc + '</p>' +
+              '<div class="card-foot">' +
+                '<span class="builders" aria-hidden="true">' + peopleHtml + '</span>' +
+                '<a class="repo-link ext" href="' + REPO_BASE + tool.repo + '" rel="noopener" tabindex="-1">' + tool.repo + '</a>' +
+              '</div>' +
+            '</div></div></div>';
+
+          // On touch, the card itself toggles open. On hover devices, hover handles it,
+          // but click/keyboard still toggles a pinned-open state for accessibility.
+          card.addEventListener("click", function (e) {
+            // let the repo link work normally
+            if (e.target.closest("a")) return;
+            var open = card.classList.toggle("is-open");
+            card.setAttribute("aria-expanded", open ? "true" : "false");
+            var link = card.querySelector(".repo-link");
+            if (link) link.tabIndex = open ? 0 : -1;
+          });
+
+          // keep repo link reachable when opened via hover (desktop)
+          if (HAS_HOVER) {
+            card.addEventListener("mouseenter", function () {
+              var link = card.querySelector(".repo-link");
+              if (link) link.tabIndex = 0;
+            });
+            card.addEventListener("mouseleave", function () {
+              if (!card.classList.contains("is-open")) {
+                var link = card.querySelector(".repo-link");
+                if (link) link.tabIndex = -1;
+              }
+            });
+          }
+
+          return card;
+        }
+
+        TOOLS.forEach(function (tool) {
+          var c = buildCard(tool);
+          grid.insertBefore(c, emptyState);
+          cardEls.push(c);
         });
 
-        var rule = document.getElementById("heroRule");
-        if (rule && !reduce) {
-          rule.style.transform = "scaleX(0)";
-          rule.style.transition = "transform 0.7s cubic-bezier(0.2,0.7,0.3,1) 0.15s";
-          requestAnimationFrame(function () { requestAnimationFrame(function () { rule.style.transform = "scaleX(1)"; }); });
+        /* size the trace rect to each card's perimeter so the draw is exact */
+        function sizeTraces() {
+          cardEls.forEach(function (card) {
+            var rect = card.querySelector(".trace rect");
+            var svg = card.querySelector(".trace");
+            if (!rect || !svg) return;
+            var w = card.clientWidth, h = card.clientHeight;
+            svg.setAttribute("viewBox", "0 0 " + w + " " + h);
+            var rw = w - 1.5, rh = h - 1.5;
+            rect.setAttribute("width", rw);
+            rect.setAttribute("height", rh);
+            var perim = 2 * (rw + rh);
+            rect.style.setProperty("--perim", perim);
+            rect.style.strokeDasharray = perim;
+            rect.style.strokeDashoffset = perim;
+          });
         }
 
-        var els = document.querySelectorAll(".reveal:not(.in)");
-        if (reduce || !("IntersectionObserver" in window)) {
-          els.forEach(function (el) { el.classList.add("in"); });
-        } else {
-          var obs = new IntersectionObserver(function (entries) {
-            entries.forEach(function (e) {
-              if (e.isIntersecting) { e.target.classList.add("in"); obs.unobserve(e.target); }
-            });
-          }, { threshold: 0.12 });
-          els.forEach(function (el) { obs.observe(el); });
+        /* ---------------------------- FILTER ----------------------------- */
+        var chips = Array.prototype.slice.call(document.querySelectorAll(".chip"));
+        var searchInput = document.getElementById("searchInput");
+        var searchWrap = document.getElementById("searchWrap");
+        var searchClear = document.getElementById("searchClear");
+        var resultLine = document.getElementById("resultLine");
+        var resetBtn = document.getElementById("resetBtn");
+
+        var activeStack = "all";
+        var query = "";
+
+        function computeCounts() {
+          var counts = { all: TOOLS.length };
+          TOOLS.forEach(function (t) { counts[t.stack] = (counts[t.stack] || 0) + 1; });
+          document.querySelectorAll(".cnt").forEach(function (el) {
+            var k = el.getAttribute("data-count");
+            el.textContent = counts[k] != null ? counts[k] : 0;
+          });
         }
 
-        // products: gentle float + slight darkening driven by scroll position
-        var rows = Array.prototype.slice.call(document.querySelectorAll(".tool-row"));
-        if (rows.length && !reduce) {
-          var ticking = false;
-          function paint() {
-            ticking = false;
-            var mid = window.innerHeight / 2;
-            for (var i = 0; i < rows.length; i++) {
-              var r = rows[i].getBoundingClientRect();
-              var d = (r.top + r.height / 2 - mid) / mid; // 0 at viewport centre
-              if (d > 1) d = 1; else if (d < -1) d = -1;
-              rows[i].style.setProperty("--ty", (d * 8).toFixed(1) + "px");
-              rows[i].style.setProperty("--dim", (1 - Math.abs(d) * 0.12).toFixed(3));
+        function applyFilter() {
+          var q = query.trim().toLowerCase();
+          var shown = 0;
+          cardEls.forEach(function (card) {
+            var stackOk = activeStack === "all" || card.getAttribute("data-stack") === activeStack;
+            var searchOk = !q || card.getAttribute("data-search").indexOf(q) !== -1;
+            var visible = stackOk && searchOk;
+            if (visible) {
+              if (card.style.display === "none" || card.hidden) {
+                card.style.display = "";
+                // re-trigger reflow-in animation
+                if (!REDUCED) { card.style.animation = "none"; void card.offsetWidth; card.style.animation = ""; }
+              }
+              card.style.display = "";
+              shown++;
+            } else {
+              card.style.display = "none";
+              // collapse any pinned-open state when hidden
+              card.classList.remove("is-open");
+              card.setAttribute("aria-expanded", "false");
             }
+          });
+
+          emptyState.classList.toggle("show", shown === 0);
+
+          // result line
+          var label;
+          if (activeStack === "all" && !q) {
+            label = "Showing all <b>" + shown + "</b> tools";
+          } else {
+            var parts = [];
+            if (activeStack !== "all") parts.push(activeStack);
+            if (q) parts.push('“' + q + '”');
+            label = "<b>" + shown + "</b> " + (shown === 1 ? "tool" : "tools") + " · " + parts.join(" · ");
           }
-          function onScroll() { if (!ticking) { ticking = true; requestAnimationFrame(paint); } }
-          window.addEventListener("scroll", onScroll, { passive: true });
-          window.addEventListener("resize", onScroll);
-          paint();
+          resultLine.innerHTML = label;
+
+          // resize traces after layout settles
+          requestAnimationFrame(sizeTraces);
+        }
+
+        chips.forEach(function (chip) {
+          chip.addEventListener("click", function () {
+            chips.forEach(function (c) {
+              var on = c === chip;
+              c.setAttribute("aria-pressed", on ? "true" : "false");
+              // the active chip glows red (whether it's "All" or a specific stack)
+              c.classList.toggle("is-red", on);
+            });
+            activeStack = chip.getAttribute("data-stack");
+            applyFilter();
+          });
+        });
+
+        var searchDebounce;
+        searchInput.addEventListener("input", function () {
+          query = searchInput.value;
+          searchWrap.classList.toggle("has-val", query.length > 0);
+          clearTimeout(searchDebounce);
+          searchDebounce = setTimeout(applyFilter, 90);
+        });
+        searchInput.addEventListener("keydown", function (e) {
+          if (e.key === "Escape" && query) { e.preventDefault(); query = ""; searchInput.value = ""; searchWrap.classList.remove("has-val"); applyFilter(); }
+        });
+        searchClear.addEventListener("click", function () {
+          query = ""; searchInput.value = ""; searchWrap.classList.remove("has-val");
+          searchInput.focus(); applyFilter();
+        });
+        resetBtn.addEventListener("click", function () {
+          query = ""; searchInput.value = ""; searchWrap.classList.remove("has-val");
+          activeStack = "all";
+          chips.forEach(function (c) {
+            var on = c.getAttribute("data-stack") === "all";
+            c.setAttribute("aria-pressed", on ? "true" : "false");
+            c.classList.toggle("is-red", on);
+          });
+          applyFilter();
+        });
+
+        computeCounts();
+        applyFilter();
+
+        var rsz;
+        window.addEventListener("resize", function () { clearTimeout(rsz); rsz = setTimeout(sizeTraces, 150); });
+        window.addEventListener("load", sizeTraces);
+
+        /* ===================================================================
+           HERO FORGE — periodic anvil strike: flash + sparks + lightning arc
+           =================================================================== */
+        var stage = document.getElementById("forgeStage");
+        var arcPath = document.getElementById("heroArcPath");
+
+        if (arcPath) {
+          var len = arcPath.getTotalLength();
+          arcPath.style.setProperty("--len", len);
+          arcPath.style.strokeDasharray = len;
+          arcPath.style.strokeDashoffset = len;
+        }
+
+        function spawnSparks() {
+          var n = 14;
+          for (var i = 0; i < n; i++) {
+            (function (i) {
+              var s = document.createElement("span");
+              s.className = "spark";
+              stage.appendChild(s);
+              var angle = (-90 + (Math.random() * 150 - 75)) * Math.PI / 180; // mostly upward
+              var dist = 40 + Math.random() * 95;
+              var dx = Math.cos(angle) * dist;
+              var dy = Math.sin(angle) * dist;
+              var dur = 520 + Math.random() * 480;
+              var size = 2 + Math.random() * 2.5;
+              s.style.width = s.style.height = size + "px";
+              // animate via WAAPI so we don't pile up CSS keyframes
+              var anim = s.animate(
+                [
+                  { transform: "translate(-50%,-50%) translate(0,0) scale(1)", opacity: 1 },
+                  { transform: "translate(-50%,-50%) translate(" + dx + "px," + dy + "px) scale(0.2)", opacity: 0 }
+                ],
+                { duration: dur, easing: "cubic-bezier(.25,.6,.35,1)" }
+              );
+              anim.onfinish = function () { s.remove(); };
+            })(i);
+          }
+        }
+
+        var strikeTimer;
+        function strike() {
+          if (REDUCED || document.hidden) { schedule(); return; }
+          stage.classList.remove("struck");
+          void stage.offsetWidth; // reflow to restart animations
+          stage.classList.add("struck");
+          spawnSparks();
+          schedule();
+        }
+        function schedule() {
+          clearTimeout(strikeTimer);
+          // irregular cadence so it reads like real forge work, not a metronome
+          var delay = 4200 + Math.random() * 3400;
+          strikeTimer = setTimeout(strike, delay);
+        }
+
+        if (!REDUCED && stage) {
+          // first strike shortly after load for delight, then settle into cadence
+          setTimeout(strike, 1400);
+          // pause work when the tab is hidden, resume on return
+          document.addEventListener("visibilitychange", function () {
+            if (!document.hidden) { clearTimeout(strikeTimer); schedule(); }
+          });
+        }
+
+        /* allow a manual strike when the hero mark is clicked (desktop delight) */
+        if (stage) {
+          var heroMarkWrap = stage.closest(".hero-mark");
+          if (heroMarkWrap) {
+            heroMarkWrap.style.cursor = REDUCED ? "default" : "pointer";
+            heroMarkWrap.addEventListener("click", function () {
+              if (REDUCED) return;
+              clearTimeout(strikeTimer);
+              strike();
+            });
+          }
         }
       })();
     </script>
