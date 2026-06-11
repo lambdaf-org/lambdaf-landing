@@ -3,14 +3,14 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Lambdaforge · tools that show their work</title>
+    <title>Lambdaforge: tools that show their work</title>
     <meta
       name="description"
       content="Lambdaforge builds software to be used, then opens the source. A second brain, a Swiss-law counsel that quotes the statute, a chat-archive analyst, a docs-to-briefing pipeline, an agent scaffold, and more. The ones that answer you tell you where the answer came from."
     />
     <meta name="theme-color" content="#faf6ee" />
     <meta property="og:type" content="website" />
-    <meta property="og:title" content="Lambdaforge · tools that show their work" />
+    <meta property="og:title" content="Lambdaforge: tools that show their work" />
     <meta property="og:description" content="Software built to be used, then opened. Browse the catalogue by stack and read how each tool works." />
     <meta property="og:image" content="lambdaforge-logo.png" />
     <meta name="twitter:card" content="summary_large_image" />
@@ -37,11 +37,8 @@
         --red-deep: #9c1717;
         --red-tint: rgba(185, 31, 31, 0.05);
         --ember: #e2641f;
-        /* one rail measure, one index hang-indent, one bar height — shared, not re-typed */
         --rail: 13rem;
-        --ino: 2.05rem;
         --bar: 4.5rem;
-        /* four-step mono ladder */
         --m1: 0.64rem;
         --m2: 0.70rem;
         --m3: 0.76rem;
@@ -74,10 +71,7 @@
       }
       main, .masthead, footer { position: relative; z-index: 3; }
 
-      h1, h2, h3 {
-        font-family: "Zilla Slab", Georgia, serif; color: var(--ink); margin: 0;
-        font-weight: 700; letter-spacing: -0.01em;
-      }
+      h1, h2, h3 { font-family: "Zilla Slab", Georgia, serif; color: var(--ink); margin: 0; font-weight: 700; letter-spacing: -0.01em; }
 
       .wrap { max-width: 1080px; margin: 0 auto; padding: 0 1.6rem; }
 
@@ -141,7 +135,7 @@
       @keyframes kindle { from { opacity: 0; transform: scale(0.9); } to { opacity: 0.6; transform: scale(1); } }
       @keyframes breathe { 0%,100% { opacity: 0.5; } 50% { opacity: 0.68; } }
 
-      /* ---------- catalogue (single-column editorial index) ---------- */
+      /* ---------- catalogue (two-column cards) ---------- */
       #tools { padding: 3.75rem 0 4.25rem; }
       .controls { display: flex; flex-wrap: wrap; align-items: center; gap: 0.7rem 1rem; margin-bottom: 0.3rem; }
       .chips { display: flex; flex-wrap: wrap; gap: 0.4rem; }
@@ -155,31 +149,34 @@
       .search svg { position: absolute; left: 0; top: 50%; transform: translateY(-50%); width: 0.95rem; height: 0.95rem; color: var(--meta); }
       .count { font-family: "IBM Plex Mono", monospace; font-size: var(--m2); color: var(--meta); margin: 0.9rem 0 0.2rem; min-height: 1rem; font-variant-numeric: tabular-nums; }
 
-      .index { border-top: 1px solid var(--rule); }
-      .tool { position: relative; border-bottom: 1px solid var(--rule); padding: 1.4rem 1.5rem 1.4rem calc(1.5rem + var(--ino)); cursor: pointer; transition: background 0.18s ease; }
+      .grid { display: grid; grid-template-columns: 1fr; border-top: 1px solid var(--rule); }
+      @media (min-width: 680px) { .grid { grid-template-columns: 1fr 1fr; } }
+      .tool { position: relative; border-bottom: 1px solid var(--rule); padding: 1.5rem; cursor: pointer; transition: background 0.18s ease; }
+      @media (min-width: 680px) { .tool:nth-child(odd) { border-right: 1px solid var(--rule); } }
       .tool::before { content: ""; position: absolute; left: 0; top: -1px; bottom: -1px; width: 0; background: var(--red); transition: width 0.22s cubic-bezier(0.2,0.7,0.3,1); }
-      .tool:hover, .tool.open { background: var(--red-tint); }
-      .tool:hover::before, .tool.open::before { width: 3px; }
-      .tool-no { position: absolute; left: 1.5rem; top: 1.5rem; font-family: "Zilla Slab", serif; font-weight: 700; font-size: 1rem; color: var(--red); line-height: 1; font-variant-numeric: tabular-nums; }
-      .tool-repo { position: absolute; right: 1.5rem; top: 1.5rem; font-family: "IBM Plex Mono", monospace; font-size: var(--m2); color: var(--muted); transition: color 0.15s; }
-      .tool:hover .tool-repo { color: var(--red); }
+      .tool:hover, .tool.open, .tool:focus-within { background: var(--red-tint); }
+      .tool:hover::before, .tool.open::before, .tool:focus-within::before { width: 3px; }
+      .tool-top { display: flex; align-items: baseline; gap: 0.7rem; }
+      .tool-no { font-family: "Zilla Slab", serif; font-weight: 700; font-size: 1rem; color: var(--red); line-height: 1; min-width: 1.6rem; font-variant-numeric: tabular-nums; }
       .tool-name { margin: 0; }
-      .tool-btn { display: inline; font-family: "Zilla Slab", serif; font-weight: 700; font-size: 1.32rem; letter-spacing: -0.01em; color: var(--ink); text-align: left; padding: 0; }
-      .tool-scope { font-family: "IBM Plex Mono", monospace; font-size: var(--m1); text-transform: uppercase; letter-spacing: 0.1em; color: var(--meta); margin: 0.5rem 0 0; }
-      .tool-essence { color: var(--ink); font-size: 1rem; line-height: 1.5; margin: 0.5rem 0 0; max-width: 62ch; }
-      .tool-detail { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.42s cubic-bezier(0.2,0.7,0.3,1); }
-      .tool.open .tool-detail { grid-template-rows: 1fr; }
+      .tool-btn { display: inline; font-family: "Zilla Slab", serif; font-weight: 700; font-size: 1.28rem; letter-spacing: -0.01em; color: var(--ink); text-align: left; padding: 0; }
+      .tool-repo { margin-left: auto; font-family: "IBM Plex Mono", monospace; font-size: var(--m2); color: var(--muted); white-space: nowrap; transition: color 0.15s; }
+      .tool:hover .tool-repo { color: var(--red); }
+      .tool-scope { font-family: "IBM Plex Mono", monospace; font-size: var(--m1); text-transform: uppercase; letter-spacing: 0.1em; color: var(--meta); margin: 0.5rem 0 0; padding-left: 2.3rem; }
+      .tool-essence { color: var(--ink); font-size: 1rem; line-height: 1.5; margin: 0.5rem 0 0; padding-left: 2.3rem; }
+      .tool-detail { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.42s cubic-bezier(0.2,0.7,0.3,1); padding-left: 2.3rem; }
+      .tool:hover .tool-detail, .tool.open .tool-detail, .tool:focus-within .tool-detail { grid-template-rows: 1fr; }
       .tool-detail > .inner { overflow: hidden; min-height: 0; opacity: 0; transition: opacity 0.32s ease 0.08s; }
-      .tool.open .tool-detail > .inner { opacity: 1; }
-      .tool-mech { color: var(--muted); font-size: 0.95rem; line-height: 1.58; margin: 0.75rem 0 0; max-width: 64ch; }
-      .tool-disc { font-size: 0.93rem; color: var(--ink-2); line-height: 1.55; margin: 0.7rem 0 0; padding-left: 0.85rem; border-left: 1px solid var(--rule-strong); max-width: 60ch; font-style: italic; }
-      .tool-foot { display: flex; flex-wrap: wrap; align-items: center; gap: 1.4rem; margin: 1rem 0 0; }
+      .tool:hover .tool-detail > .inner, .tool.open .tool-detail > .inner, .tool:focus-within .tool-detail > .inner { opacity: 1; }
+      .tool-mech { color: var(--muted); font-size: 0.92rem; line-height: 1.56; margin: 0.7rem 0 0; }
+      .tool-disc { font-size: 0.9rem; color: var(--ink-2); line-height: 1.5; margin: 0.65rem 0 0; padding-left: 0.85rem; border-left: 1px solid var(--rule-strong); font-style: italic; }
+      .tool-foot { margin: 0.9rem 0 0; }
       .tags { display: flex; flex-wrap: wrap; gap: 0.35rem; }
       .tag { font-family: "IBM Plex Mono", monospace; font-size: var(--m1); color: var(--meta); border: 1px solid var(--rule); padding: 0.06rem 0.4rem; }
-      .by { display: flex; align-items: center; gap: 0.45rem; }
-      .by .lbl { font-size: 0.82rem; color: var(--meta); font-style: italic; }
+      .by { display: flex; align-items: center; gap: 0.45rem; margin: 0.8rem 0 0; }
+      .by .lbl { font-size: 0.8rem; color: var(--meta); font-style: italic; }
       .by img { width: 19px; height: 19px; border-radius: 50%; border: 1px solid rgba(28,28,28,0.16); }
-      .empty { padding: 2.5rem 1.5rem; color: var(--meta); font-family: "IBM Plex Mono", monospace; font-size: var(--m3); border-bottom: 1px solid var(--rule); }
+      .empty { padding: 2.5rem 1.5rem; color: var(--meta); font-family: "IBM Plex Mono", monospace; font-size: var(--m3); border-bottom: 1px solid var(--rule); grid-column: 1 / -1; }
 
       /* ---------- people ---------- */
       #people { background: var(--paper-3); border-top: 1px solid var(--rule-strong); border-bottom: 1px solid var(--rule-strong); padding: 4.25rem 0; }
@@ -188,6 +185,7 @@
       .person .av { width: 52px; height: 52px; flex: 0 0 52px; border-radius: 50%; border: 1px solid rgba(28,28,28,0.18); }
       .person .pmain { min-width: 0; }
       .person .pn { font-family: "Zilla Slab", serif; font-weight: 700; font-size: 1.3rem; line-height: 1.05; margin: 0; }
+      .person .prole { font-family: "IBM Plex Mono", monospace; font-size: var(--m2); color: var(--red); margin-top: 0.2rem; letter-spacing: 0.02em; }
       .person .ph { font-family: "IBM Plex Mono", monospace; font-size: var(--m2); color: var(--muted); }
       .person .pbio { font-size: 1rem; color: var(--ink-2); margin: 0.35rem 0 0; line-height: 1.5; }
 
@@ -255,11 +253,11 @@
         <div class="wrap">
           <div class="hero-grid">
             <div>
-              <span class="kicker dash">A workshop · open source</span>
+              <span class="kicker dash">Open-source workshop</span>
               <h1>Tools that<span class="b">show their work.</span></h1>
               <div class="hero-rule" id="heroRule"></div>
               <p class="lead">Software built to be used, then opened. The ones that answer you tell you <em>where the answer came from</em>.</p>
-              <p class="hero-meta"><b>Eleven repositories.</b><br />Rust · Python · Web · Claude Code · Java.</p>
+              <p class="hero-meta"><b>Eleven repositories.</b><br />Rust, Python, Web, and Claude Code.</p>
               <div class="hero-cta">
                 <a class="btn btn-ink" href="#tools">Browse the catalogue</a>
                 <a class="btn btn-ghost" href="https://github.com/lambdaf-org" target="_blank" rel="noreferrer">GitHub ↗</a>
@@ -268,7 +266,7 @@
             <div class="hero-mark">
               <div class="forge">
                 <div class="ember" aria-hidden="true"></div>
-                <img src="lambdaforge-mark.png" alt="Lambdaforge — an anvil with a forge-red lambda rising from it" />
+                <img src="lambdaforge-mark.png" alt="Lambdaforge, an anvil with a forge-red lambda rising from it" />
               </div>
             </div>
           </div>
@@ -292,7 +290,7 @@
               </div>
             </div>
             <p class="count" id="count" aria-live="polite"></p>
-            <div class="index" id="grid"></div>
+            <div class="grid" id="grid"></div>
           </div>
         </div></div>
       </section>
@@ -321,8 +319,8 @@
           </aside>
           <div class="body">
             <dl class="prin-list">
-              <div class="prin reveal"><dt class="prin-label"><span class="pn">01</span> Receipts</dt><dd class="prin-body">A claim about a person, a relationship, or the law carries a quote and a pointer back to the source, or it doesn't get written down.</dd></div>
-              <div class="prin reveal"><dt class="prin-label"><span class="pn">02</span> Computed confidence</dt><dd class="prin-body">Confidence is computed from counted evidence and shown with its tally — not asserted.</dd></div>
+              <div class="prin reveal"><dt class="prin-label"><span class="pn">01</span> Receipts</dt><dd class="prin-body">A claim about a person, a relationship, or the law carries a quote and a pointer back to the source, or it does not get written down.</dd></div>
+              <div class="prin reveal"><dt class="prin-label"><span class="pn">02</span> Computed confidence</dt><dd class="prin-body">Confidence is computed from counted evidence and shown with its tally, never asserted.</dd></div>
               <div class="prin reveal"><dt class="prin-label"><span class="pn">03</span> Explicit about what leaves</dt><dd class="prin-body">Your files stay on disk. The tools that reach a model strip secrets first and say what goes out.</dd></div>
               <div class="prin reveal"><dt class="prin-label"><span class="pn">04</span> No ceremony</dt><dd class="prin-body">Several tools are one Markdown protocol with the model as the engine. Nothing to deploy, no schema to babysit.</dd></div>
             </dl>
@@ -339,63 +337,63 @@
           <span class="word">LAMBDAFORGE</span>
         </div>
         <nav class="foot-links" aria-label="Repositories" id="foot-links"></nav>
-        <p class="foot-meta"><a class="ul" href="https://github.com/lambdaf-org" target="_blank" rel="noreferrer">github.com/lambdaf-org</a> · <span id="year">2026</span></p>
+        <p class="foot-meta"><a class="ul" href="https://github.com/lambdaf-org" target="_blank" rel="noreferrer">github.com/lambdaf-org</a>, <span id="year">2026</span></p>
       </div>
-      <div class="wrap"><p class="colophon">Set in Zilla Slab, Spectral &amp; IBM Plex Mono. Open source under lambdaf-org.</p></div>
+      <div class="wrap"><p class="colophon">Set in Zilla Slab, Spectral and IBM Plex Mono. Open source under lambdaf-org.</p></div>
     </footer>
 
     <script>
       const PEOPLE = {
-        "191-iota": { name: "iota", handle: "191-iota", bio: "Producing software people actually need." },
-        "Ajith1412": { name: "Ajith Ramesh", handle: "Ajith1412", bio: "Frontend and integration." },
-        "Thirstums": { name: "Thirsty", handle: "Thirstums", bio: "Local-first tools and tracking." },
+        "191-iota": { name: "iota", handle: "191-iota", role: "Lead", bio: "Producing software people actually need." },
+        "Thirstums": { name: "Thirsty", handle: "Thirstums", role: "Product", bio: "" },
+        "Ajith1412": { name: "Ajith Ramesh", handle: "Ajith1412", role: "Frontend and integration", bio: "" },
       };
 
       const TOOLS = [
-        { name: "Overseer", repo: "overseer", stack: "Claude Code", scope: "PROTOCOL · NO APP CODE", tags: ["Claude Code","Knowledge graph"],
-          essence: "A second brain you reason with — tell it your goals, the people around you, and your work, then ask what to focus on this week.",
-          mech: "Plain files plus one protocol (OVERSEER.md); Claude Code folds your corpus into a single graph in brain/, records dated events instead of status, and works out the current state when you ask.",
+        { name: "Overseer", repo: "overseer", stack: "Claude Code", scope: "PROTOCOL / NO APP CODE", tags: ["Claude Code","Knowledge graph"],
+          essence: "It folds your goals, the people around you, and your work into one graph, then answers what you should focus on this week.",
+          mech: "Plain files plus one protocol (OVERSEER.md): Claude Code folds your corpus into a single graph in brain/, records dated events instead of status, and works out the current state on demand.",
           disc: "It pushes back: when what you say drifts from what your record shows, it says so.", by: ["191-iota"] },
-        { name: "Saul Swissman", repo: "saul-swissman", stack: "Claude Code", scope: "SWISS LAW · NO APP CODE", tags: ["Claude Code","RAG","Fedlex"],
-          essence: "Ask about Swiss federal law and get an answer where every statement carries the article, the SR number, and the verbatim wording.",
-          mech: "Reads the statutes in corpus/ch/, routes to the governing articles through a small register, and quotes them word for word; a statement without an article and a quote doesn't get made.",
-          disc: "When a provision isn't in its corpus, it names the gap and points to Fedlex.", by: ["191-iota"] },
-        { name: "auspex", repo: "auspex-v1", stack: "Rust", scope: "RUST · LOCAL-ONLY", tags: ["Rust","Ollama","fastembed"],
-          essence: "Point it at your chat exports and get cited per-person profiles plus a real interaction graph.",
-          mech: "A single Rust binary parses your exports, runs them through a local model and fastembed retrieval, and serves an embedded graph at 127.0.0.1:8765; every claim cites the message it came from.",
-          disc: "Fully local: no telemetry, no remote calls; the server only listens on 127.0.0.1.", by: ["191-iota"] },
-        { name: "synthesis", repo: "synthesis", stack: "Python", scope: "PYTHON · DOCS & AUDIO", tags: ["Python","Anthropic API","faster-whisper"],
-          essence: "Point it at a folder of documents and get one self-contained interactive briefing, or live-transcribe a meeting into a structured report.",
-          mech: "Ingests PDFs, DOCX, and repos, runs a two-pass extraction plus an independent confirmation pass, and renders one HTML file: a timeline with expandable cards and a game plan.",
-          disc: "An item ships only if both passes agree and it carries a grounded source quote; live audio is never written to disk.", by: ["191-iota"] },
-        { name: "The Factory", repo: "the-factory", stack: "Claude Code", scope: "AGENT SCAFFOLD · ANY DOMAIN", tags: ["Claude Code","Agent","Markdown"],
-          essence: "Drop source into context/, write task.md, and run Claude Code as an autonomous worker that does the job end to end.",
-          mech: "The agent reads your context folder and task, writes output to a new folder under deliverable/, and keeps its own notes/ so the next run resumes warm. Run it interactively or headless.",
-          disc: "Output only ever lands in a new deliverable/ folder; your context/ is left untouched.", by: ["191-iota"] },
-        { name: "Neuro", repo: "neuro", stack: "Rust", scope: "RUST + VUE · REAL-TIME", tags: ["Rust","Vue 3","WebSocket","PostgreSQL"],
-          essence: "Run five short cognitive tests and get a five-part score profile with per-game leaderboards.",
-          mech: "Administers tasks modelled on established psychometric paradigms over a real-time WebSocket pipeline (Rust/Actix-Web and Vue 3) and records fine-grained metrics to PostgreSQL.",
+        { name: "Saul Swissman", repo: "saul-swissman", stack: "Claude Code", scope: "SWISS LAW / NO APP CODE", tags: ["Claude Code","RAG","Fedlex"],
+          essence: "It answers questions on Swiss federal law and backs every statement with the article, the SR number, and the verbatim wording.",
+          mech: "It reads the statutes in corpus/ch/, routes to the governing articles through a small register, and quotes them word for word. A statement without an article and a quote does not get made.",
+          disc: "When a provision is not in its corpus, it names the gap and points to Fedlex.", by: ["191-iota"] },
+        { name: "auspex", repo: "auspex-v1", stack: "Rust", scope: "RUST / LOCAL-ONLY", tags: ["Rust","Ollama","fastembed"],
+          essence: "It reads your chat exports into cited per-person profiles and a real interaction graph.",
+          mech: "A single Rust binary parses your exports, runs them through a local model and fastembed retrieval, and serves an embedded graph at 127.0.0.1:8765. Every claim cites the message it came from.",
+          disc: "Fully local: no telemetry, no remote calls, and the server only listens on 127.0.0.1.", by: ["191-iota"] },
+        { name: "synthesis", repo: "synthesis", stack: "Python", scope: "PYTHON / DOCS AND AUDIO", tags: ["Python","Anthropic API","faster-whisper"],
+          essence: "It turns a folder of documents into one self-contained interactive briefing, or transcribes a meeting live into a structured report.",
+          mech: "It ingests PDFs, DOCX, and repos, runs a two-pass extraction plus an independent confirmation pass, and renders one HTML file: a timeline with expandable cards and a game plan.",
+          disc: "An item ships only if both passes agree and it carries a grounded source quote, and live audio is never written to disk.", by: ["191-iota"] },
+        { name: "The Factory", repo: "the-factory", stack: "Claude Code", scope: "AGENT SCAFFOLD / ANY DOMAIN", tags: ["Claude Code","Agent","Markdown"],
+          essence: "It runs Claude Code as an autonomous worker that reads your context and task and does the job end to end.",
+          mech: "It reads your context folder and task, writes output to a new folder under deliverable/, and keeps its own notes/ so the next run resumes warm. It runs interactively or headless.",
+          disc: "Output only ever lands in a new deliverable/ folder, and your context/ is left untouched.", by: ["191-iota"] },
+        { name: "Neuro", repo: "neuro", stack: "Rust", scope: "RUST AND VUE / REAL-TIME", tags: ["Rust","Vue 3","WebSocket","PostgreSQL"],
+          essence: "It runs five short cognitive tests and returns a five-part score profile with per-game leaderboards.",
+          mech: "It administers tasks modelled on established psychometric paradigms over a real-time WebSocket pipeline (Rust/Actix-Web and Vue 3) and records fine-grained metrics to PostgreSQL.",
           disc: "Five separate ability scores, with anticipatory and lapse trials dropped so each one stays meaningful.", by: ["191-iota","Ajith1412"] },
-        { name: "ClockBot", repo: "clock", stack: "Rust", scope: "RUST · DISCORD BOT", tags: ["Rust","Discord","SQLite","plotters"],
-          essence: "Clock in and out of work from Discord and get weekly hours, rankings, and PNG charts back.",
-          mech: "Tracks time per activity in SQLite; /clock in and out, leaderboards, and stats, plus a Monday 00:00 Europe/Zurich weekly report that archives the week and assigns earned roles.",
+        { name: "ClockBot", repo: "clock", stack: "Rust", scope: "RUST / DISCORD BOT", tags: ["Rust","Discord","SQLite","plotters"],
+          essence: "It tracks work from Discord and reports back weekly hours, rankings, and PNG charts.",
+          mech: "It tracks time per activity in SQLite with /clock in and out, leaderboards, and stats, plus a Monday 00:00 Europe/Zurich weekly report that archives the week and assigns earned roles.",
           disc: "Charts render on a pure-Rust backend with an embedded font, so the runtime image needs no system font packages.", by: ["191-iota","Thirstums","Ajith1412"] },
-        { name: "transl", repo: "transl_cli", stack: "Rust", scope: "RUST · CLI", tags: ["Rust","CLI","i18n","JSON"],
-          essence: "Add a key to your base-language JSON and have it carried across every other language file.",
-          mech: "A small Rust CLI for projects that keep one JSON file per language. Run transl <header> <key> <value> <base> to add a property to the base language and sync it into the others.",
+        { name: "transl", repo: "transl_cli", stack: "Rust", scope: "RUST / CLI", tags: ["Rust","CLI","i18n","JSON"],
+          essence: "It carries a new key from your base-language JSON across every other language file.",
+          mech: "A small Rust CLI for projects that keep one JSON file per language. Running transl <header> <key> <value> <base> adds a property to the base language and syncs it into the others.",
           disc: "A single MIT-licensed binary that touches only your language JSON files.", by: ["191-iota"] },
-        { name: "MoneyForge", repo: "MoneyForge", stack: "Web", scope: "NEXT.JS · LOCAL-ONLY", tags: ["Next.js","React","Tailwind"],
-          essence: "Track savings goals and see how many months each one needs to hit its target.",
-          mech: "Each counter holds a name, target, balance, and monthly contribution; it shows percent progress and an ETA, with quick add/subtract buttons and a totals row across all goals.",
+        { name: "MoneyForge", repo: "MoneyForge", stack: "Web", scope: "NEXT.JS / LOCAL-ONLY", tags: ["Next.js","React","Tailwind"],
+          essence: "It tracks savings goals and shows how many months each one needs to hit its target.",
+          mech: "Each counter holds a name, target, balance, and monthly contribution. It shows percent progress and an ETA, with quick add and subtract buttons and a totals row across all goals.",
           disc: "No backend and no accounts: counters live in your browser's localStorage and never leave the device.", by: ["Thirstums"] },
-        { name: "GradeForge", repo: "GradeForge", stack: "Web", scope: "NEXT.JS · LOCAL-ONLY", tags: ["Next.js","TypeScript","i18n"],
-          essence: "A grade calculator that prints the exact formula and rounding behind every average, for any country's grading system.",
-          mech: "A browser-only weighted-average calculator with ~20 country presets and a custom-scale builder; for every average it prints the inputs, the formula, and the rounding rule it applied.",
-          disc: "No accounts, no portal — nothing leaves the page.", by: ["191-iota"] },
-        { name: "AlgoLeague", repo: "algoleague_frontend", stack: "Java", scope: "JAVA · REAL-TIME DUELS", tags: ["Spring","Angular","Judge0"],
-          essence: "Real-time Java coding duels where you're ranked by how your solution actually runs, not just whether it passes.",
-          mech: "A Spring and Angular app: the same problem drops for everyone at once, submissions run on Judge0, and your solution is timed in-JVM with start-up excluded, then ranked by percentile.",
-          disc: "You're measured on your algorithm's own runtime, with every player judged the same way.", by: ["191-iota","Ajith1412"] },
+        { name: "GradeForge", repo: "GradeForge", stack: "Web", scope: "NEXT.JS / LOCAL-ONLY", tags: ["Next.js","TypeScript","i18n"],
+          essence: "It calculates grades for any country's system and prints the exact formula and rounding behind every average.",
+          mech: "A browser-only weighted-average calculator with around 20 country presets and a custom-scale builder. For every average it prints the inputs, the formula, and the rounding rule it applied.",
+          disc: "No accounts and no portal, and nothing leaves the page.", by: ["191-iota"] },
+        { name: "AlgoLeague", repo: "algoleague_frontend", stack: "Web", scope: "REAL-TIME CODE DUELS", tags: ["Real-time","Multiplayer","Judge"],
+          essence: "It runs real-time coding duels, ranked by how fast your solution actually runs and not just whether it passes. Realtime LeetCode, basically.",
+          mech: "Players get the same problem at the same moment, each submission runs in a sandbox, and every solution is timed and ranked by percentile instead of a plain pass or fail. The language lineup grows over time.",
+          disc: "You are ranked on real performance, with every player measured the same way.", by: ["191-iota","Ajith1412"] },
       ];
 
       const REPO = "https://github.com/lambdaf-org/";
@@ -413,9 +411,11 @@
         const by = t.by.map(h => `<img src="people/${esc(h)}.png" alt="${esc(PEOPLE[h]?.name || h)}" width="19" height="19" title="${esc(PEOPLE[h]?.name || h)}" />`).join("");
         const tags = t.tags.map(x => `<span class="tag">${esc(x)}</span>`).join("");
         return `<article class="tool" data-stack="${esc(t.stack)}" data-name="${esc(t.name.toLowerCase())}">
-          <span class="tool-no" aria-hidden="true">${String(i + 1).padStart(2, "0")}</span>
-          <a class="tool-repo ul" href="${REPO}${esc(t.repo)}" target="_blank" rel="noreferrer" aria-label="${esc(t.name)} repository on GitHub">/${esc(t.repo)}</a>
-          <h3 class="tool-name"><button class="tool-btn" type="button" aria-expanded="false" aria-controls="${pid}">${esc(t.name)}</button></h3>
+          <div class="tool-top">
+            <span class="tool-no" aria-hidden="true">${String(i + 1).padStart(2, "0")}</span>
+            <h3 class="tool-name"><button class="tool-btn" type="button" aria-expanded="false" aria-controls="${pid}">${esc(t.name)}</button></h3>
+            <a class="tool-repo ul" href="${REPO}${esc(t.repo)}" target="_blank" rel="noreferrer" aria-label="${esc(t.name)} repository on GitHub">/${esc(t.repo)}</a>
+          </div>
           <p class="tool-scope">${esc(t.scope)}</p>
           <p class="tool-essence">${esc(t.essence)}</p>
           <div class="tool-detail" id="${pid}"><div class="inner">
@@ -440,7 +440,6 @@
         if (shown.length !== lastCount) { countEl.textContent = `${shown.length} of ${TOOLS.length} tools`; lastCount = shown.length; }
       }
 
-      // one delegated handler for the whole index — survives re-renders, no per-card re-wiring
       grid.addEventListener("click", e => {
         if (e.target.closest("a")) return;
         const card = e.target.closest(".tool");
@@ -471,8 +470,9 @@
           <img class="av" src="people/${esc(p.handle)}.png" alt="" width="52" height="52" />
           <div class="pmain">
             <h3 class="pn">${esc(p.name)}</h3>
+            <div class="prole">${esc(p.role)}</div>
             <a class="ph ul" href="https://github.com/${esc(p.handle)}" target="_blank" rel="noreferrer">@${esc(p.handle)}</a>
-            <p class="pbio">${esc(p.bio)}</p>
+            ${p.bio ? `<p class="pbio">${esc(p.bio)}</p>` : ""}
           </div>
         </div>`).join("");
       document.getElementById("foot-links").innerHTML = TOOLS.slice(0, 8).map(t => `<a href="${REPO}${esc(t.repo)}" target="_blank" rel="noreferrer">${esc(t.repo)}</a>`).join("");
