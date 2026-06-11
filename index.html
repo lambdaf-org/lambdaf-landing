@@ -110,7 +110,6 @@
       .btn { display: inline-flex; align-items: center; gap: 0.45rem; padding: 0.62rem 1.15rem; font-family: "IBM Plex Mono", monospace; font-size: var(--m4); letter-spacing: 0.03em; border: 1px solid var(--ink); transition: all 0.15s ease; }
       .btn-ink { background: var(--ink); color: var(--paper); }
       .btn-ink:hover { background: var(--red); border-color: var(--red); }
-      .btn-ghost { background: transparent; color: var(--ink); }
       .btn-ghost:hover { background: var(--ink); color: var(--paper); }
 
       /* ---------- hero ---------- */
@@ -216,6 +215,9 @@
       .reveal.in { opacity: 1; transform: none; }
       :focus-visible { outline: 2px solid var(--red); outline-offset: 3px; }
 
+      /* =====================================================================
+         REDUCED MOTION — disable all non-essential motion
+         ===================================================================== */
       @media (prefers-reduced-motion: reduce) {
         html { scroll-behavior: auto; }
         .reveal { opacity: 1; transform: none; transition: none; }
@@ -234,7 +236,7 @@
     <header class="masthead">
       <div class="inner">
         <a class="brand" href="#top" aria-label="Lambdaforge home">
-          <img src="lambdaforge-mark.png" alt="" width="26" height="26" />
+          <img src="lambdaforge-mark.png" alt="" />
           <span class="word">LAMBDAFORGE</span>
         </a>
         <nav class="nav" aria-label="Site">
@@ -246,7 +248,7 @@
     </header>
 
     <main id="top">
-      <!-- hero -->
+      <!-- ============================ HERO ============================ -->
       <section id="hero">
         <div class="wrap">
           <div class="hero-grid">
@@ -293,7 +295,7 @@
         </div></div>
       </section>
 
-      <!-- people -->
+      <!-- ============================ PEOPLE ============================ -->
       <section id="people">
         <div class="wrap"><div class="sec">
           <aside class="rail reveal">
@@ -307,7 +309,7 @@
         </div></div>
       </section>
 
-      <!-- principles -->
+      <!-- ============================ PRINCIPLES ============================ -->
       <section id="principles">
         <div class="wrap"><div class="sec">
           <aside class="rail reveal">
@@ -327,6 +329,7 @@
       </section>
     </main>
 
+    <!-- ============================ FOOTER ============================ -->
     <footer>
       <div class="wrap inner">
         <div class="foot-brand">
