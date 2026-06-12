@@ -398,6 +398,10 @@
           essence: "It walls off the apps you choose behind an opaque full-screen gate that opens only once you type i want this by hand. Opening an app becomes a conscious act.",
           mech: "A two-file Kotlin accessibility service (~600 KB, zero dependencies) covers a gated app before anything shows, blocks pasting the phrase by wiping clipboard-sized text jumps, and re-arms the gate when you leave the app.",
           disc: "It reads nothing from the screen (canRetrieveWindowContent is false) and the manifest requests no network access at all.", by: ["191-iota"] },
+        { name: "trace", repo: "trace", stack: "Tauri", scope: "DESKTOP / TIME FORENSICS", tags: ["Tauri", "Rust", "Next.js", "SQLite"],
+          essence:"It shows where your computer time actually went. Not vibes, not productivity theater — a local receipt of active time, idle time, focus blocks, context switches, app categories, and the hour your day fragmented.",
+          mech:"A Windows-first Tauri desktop app pipes Rust-side activity collection into local SQLite, then renders the day through a Next.js receipt UI. It tracks foreground apps, categories, browser domains, idle spans, switch count, and input volume without storing input contents.",
+          disc:"It ships with a strict local-only posture: no account, no cloud, no sync, no analytics, no telemetry, no remote logging, no screenshots, no clipboard access, no keystroke contents, no packet contents, and no full URLs by default. The user can purge local Trace data in-app.",by: ["Thirstums"] },
       ];
 
       const REPO = "https://github.com/lambdaf-org/";
