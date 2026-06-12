@@ -216,7 +216,7 @@
       :focus-visible { outline: 2px solid var(--red); outline-offset: 3px; }
 
       /* =====================================================================
-         REDUCED MOTION — disable all non-essential motion
+         REDUCED MOTION: disable all non-essential motion
          ===================================================================== */
       @media (prefers-reduced-motion: reduce) {
         html { scroll-behavior: auto; }
@@ -382,18 +382,22 @@
           essence: "It carries a new key from your base-language JSON across every other language file.",
           mech: "A small Rust CLI for projects that keep one JSON file per language. Running transl <header> <key> <value> <base> adds a property to the base language and syncs it into the others.",
           disc: "A single MIT-licensed binary that touches only your language JSON files.", by: ["191-iota"] },
-        { name: "money-forge", repo: "MoneyForge", stack: "Web", scope: "NEXT.JS / LOCAL-ONLY", tags: ["Next.js","React","Tailwind"],
+        { name: "money-forge", repo: "money-forge", stack: "Web", scope: "NEXT.JS / LOCAL-ONLY", tags: ["Next.js","React","Tailwind"],
           essence: "It tracks savings goals and shows how many months each one needs to hit its target.",
           mech: "Each counter holds a name, target, balance, and monthly contribution. It shows percent progress and an ETA, with quick add and subtract buttons and a totals row across all goals.",
           disc: "No backend and no accounts: counters live in your browser's localStorage and never leave the device.", by: ["Thirstums"] },
-        { name: "grade-forge", repo: "GradeForge", stack: "Web", scope: "NEXT.JS / LOCAL-ONLY", tags: ["Next.js","React","TypeScript"],
+        { name: "grade-forge", repo: "grade-forge", stack: "Web", scope: "NEXT.JS / LOCAL-ONLY", tags: ["Next.js","React","TypeScript"],
           essence: "It calculates weighted averages for any grading system and shows the exact formula, inputs, weights, and rounding rule behind every result.",
           mech: "A browser-only grade calculator for count-up systems like Switzerland or France, count-down systems like Germany or Austria, and letter or GPA scales. Pick a preset or build a custom scale, enter grades and weights, and it prints a full receipt: the weighted formula, progress, pass verdict, and the rounding rule it applied.",
           disc: "No backend, no accounts, no telemetry: grades and example data live in your browser's localStorage and never leave the device.", by: ["191-iota","Thirstums"] },
-        { name: "algo-league", repo: "algoleague_frontend", stack: "Web", scope: "REAL-TIME CODE DUELS", tags: ["Real-time","Multiplayer","Judge0"],
-          essence: "It runs real-time coding duels, ranked by how fast your solution actually runs and not just whether it passes. Realtime LeetCode, basically.",
-          mech: "Players get the same problem at the same moment, each submission runs in a sandbox, and every solution is timed and ranked by percentile instead of a plain pass or fail. The language lineup grows over time.",
+        { name: "algo-league", repo: "algoleague-frontend", stack: "Web", scope: "REAL-TIME JAVA DUELS", tags: ["Real-time","Multiplayer","Java","Judge0"],
+          essence: "It runs real-time coding duels where passing only qualifies you: the ranking comes from how fast your solution actually runs. Realtime LeetCode, basically.",
+          mech: "Players get the same Java problem at the same moment, each submission runs in a sandbox, and every solution is timed and ranked by percentile. Java is the only supported language for now.",
           disc: "You are ranked on real performance, with every player measured the same way.", by: ["191-iota","Ajith1412"] },
+        { name: "impulse-gate", repo: "impulse-gate", stack: "Android", scope: "ANDROID / PHRASE GATE", tags: ["Android","Kotlin","Accessibility"],
+          essence: "It walls off the apps you choose behind an opaque full-screen gate that opens only once you type i want this by hand. Opening an app becomes a conscious act.",
+          mech: "A two-file Kotlin accessibility service (~600 KB, zero dependencies) covers a gated app before anything shows, blocks pasting the phrase by wiping clipboard-sized text jumps, and re-arms the gate when you leave the app.",
+          disc: "It reads nothing from the screen (canRetrieveWindowContent is false) and the manifest requests no network access at all.", by: ["191-iota"] },
       ];
 
       const REPO = "https://github.com/lambdaf-org/";
